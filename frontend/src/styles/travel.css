@@ -1,0 +1,109 @@
+﻿/* Presentation inspired by the supplied Mona Tour reference. */
+:root { --vx-primary: #63ab45; --vx-primary-dark: #43812e; --vx-primary-darker: #1c3025; --vx-bg-alt: #fff; --vx-border: #e5ebe2; --vx-surface: #f5f8f2; --vx-surface-strong: #eaf3e4; --vx-muted: #72766f; --vx-text: #263029; --vx-radius: 10px; }
+body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 16px; }
+.vx-topbar { background: repeating-linear-gradient(45deg,transparent,transparent 3px,#ffffff06 3px,#ffffff06 5px),#63ab45; padding: 10px 5%; font-size: 14px; }
+.vx-topbar-inner { max-width: 1290px; }
+.vx-topbar-inner > div:first-child > span:first-child { display: none; }
+.vx-portal-pill { border: 0; background: transparent; border-radius: 3px; font-size: 13px; padding: 3px 8px; }
+.vx-portal-pill.active, .vx-portal-pill:hover { background: #ffffff26; }
+.travel-header { background: #fff; position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 15px #00000005; }
+.travel-header-inner { max-width: 1440px; min-height: 100px; margin: auto; padding: 18px 5%; display: flex; align-items: center; gap: 28px; }
+.travel-brand-mark { color: #63ab45; font-size: 55px; line-height: 1; transform: rotate(-15deg); }
+.vx-brand-title { font-family: Georgia, 'Times New Roman', serif; font-size: 29px; color: #63ab45; }
+.vx-brand-sub { color: #d68a26; font-size: 12px; letter-spacing: .02em; text-transform: none; margin-top: 5px; }
+.travel-nav { margin-left: auto; display: flex; gap: 30px; }
+.travel-nav a { font-weight: 700; text-decoration: none; color: #7b7d80; font-size: 15px; white-space: nowrap; }
+.travel-nav a:hover, .travel-nav a:first-child { color: var(--vx-primary); }
+.travel-account { background: #f0f6ec; border: 0; color: #43812e; border-radius: 24px; padding: 12px 18px; cursor: pointer; font-size: 14px; font-weight: 600; }
+.travel-menu-toggle { display: none; }
+.vx-hero-slider { min-height: 690px; padding: 100px 6% 155px; background-position: center; }
+.vx-hero-overlay { background: linear-gradient(90deg,#10261c70,#12282125),#00000020; }
+.vx-hero-inner { display: block; max-width: 1260px; }
+.travel-hero-copy { max-width: 850px; }
+.travel-eyebrow { display: block; font-size: 19px; font-weight: 600; color: #e7f3e1; margin-bottom: 18px; }
+.vx-hero-slider h1 { font-size: clamp(40px,4.7vw,68px); line-height: 1.17; letter-spacing: -.025em; font-weight: 750; text-shadow: none; margin: 0 0 28px; }
+.travel-hero-copy p { font-size: 18px; line-height: 1.8; max-width: 670px; color: #f2f4f0; margin-bottom: 34px; }
+.vx-btn-primary { background: #63ab45; border-radius: 5px; font-weight: 700; }
+.travel-hero-cta { display: inline-block; text-decoration: none; padding: 16px 36px; font-size: 17px; }
+.travel-slide-controls { position: absolute; right: 6%; bottom: 110px; display: flex; gap: 12px; }
+.travel-slide-controls button { width: 13px; height: 13px; padding: 0; border-radius: 50%; border: 2px solid white; background: transparent; cursor: pointer; }
+.travel-slide-controls button.active { background: white; }
+.vx-search-Overlap { max-width: 1350px; margin-top: -77px; padding: 0 30px; }
+.vx-search-tabs { background: #ffffffea; border-radius: 8px 8px 0 0; backdrop-filter: none; }
+.vx-search-tab { color: #6c7568; font-size: 14px; padding: 12px 24px; }
+.vx-search-tab.active { background: #63ab45; color: #fff; }
+.vx-search-bar { border: 0; border-radius: 0 8px 8px 8px; box-shadow: 0 12px 45px #293a2110; padding: 24px; }
+.vx-search-grid { gap: 20px; }
+.vx-field-label { font-size: 14px; text-transform: none; font-weight: 600; letter-spacing: 0; color: #6d756b; }
+.vx-select,.vx-input { border-radius: 4px; font-size: 14px; min-width: 0; }
+.vx-container { max-width: 1350px; padding: 60px 30px; }
+.travel-benefits { display: grid; grid-template-columns: repeat(3,1fr); gap: 36px; padding-top: 58px; padding-bottom: 58px; }
+.travel-benefits article { display: flex; gap: 18px; align-items: flex-start; }
+.travel-benefits article > span { flex-shrink: 0; display: grid; place-items: center; border: 1px solid #e7eee0; border-radius: 50%; width: 64px; height: 64px; color: #63ab45; font-size: 30px; }
+.travel-benefits h3 { font-size: 18px; margin: 0 0 8px; }
+.travel-benefits p { font-size: 15px; color: #72766f; margin: 0; line-height: 1.7; }
+#hot-deals { background: #f7f9f5; border-radius: 16px; }
+.vx-section-title { font-size: clamp(26px,2.7vw,38px); line-height: 1.25; letter-spacing: -.025em; margin-top: 12px; }
+.vx-section-kicker { text-transform: none; letter-spacing: .02em; font-size: 16px; }
+.vx-section-header { margin-bottom: 30px; }
+.vx-tour-card { border-color: #e9ece6; border-radius: 10px; box-shadow: 0 5px 20px #1c302508; }
+.vx-tour-thumb { height: 255px; }
+.vx-tour-body { padding: 24px; }
+.vx-ribbon-hot { background: #63ab45; box-shadow: none; }
+.vx-ribbon-type { background: #fff; color: #43812e; }
+.vx-region-tabs { flex-wrap: wrap; }
+.vx-footer { background: #1c3025; }
+.vx-footer-inner { max-width: 1290px; }
+.vx-footer p, .vx-footer li { font-size: 14px !important; }
+.vx-catalog-layout > *, .vx-search-grid > * { min-width: 0; }
+@media (max-width: 1100px) {
+  .travel-header-inner { gap: 18px; padding-inline: 24px; }
+  .travel-nav { gap: 18px; }
+  .vx-brand-title { font-size: 24px; }
+  .vx-brand-sub { font-size: 11px; }
+  .travel-brand-mark { font-size: 40px; }
+  .vx-search-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .vx-search-grid > button { grid-column: 1 / -1; }
+  .vx-grid-3 { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .travel-benefits { gap: 24px; }
+  .travel-benefits article { flex-direction: column; }
+}
+@media (max-width: 760px) {
+  .vx-topbar { padding: 7px 16px; }
+  .vx-topbar-inner { justify-content: center; gap: 5px; }
+  .vx-topbar-inner > div:first-child { justify-content: center; font-size: 12px; }
+  .vx-topbar-inner > div:first-child > span:last-child { display: none; }
+  .vx-portal-pills { justify-content: center; gap: 0; }
+  .vx-portal-pill { font-size: 12px; }
+  .travel-header-inner { padding: 14px 16px; min-height: 78px; gap: 10px; flex-wrap: wrap; }
+  .vx-brand { gap: 8px; }
+  .vx-brand-title { font-size: 23px; }
+  .travel-brand-mark { font-size: 34px; }
+  .travel-account { padding: 9px 10px; font-size: 12px; }
+  .travel-menu-toggle { display: block; margin-left: auto; background: transparent; border: 1px solid #e5ebe2; border-radius: 4px; padding: 5px 10px; color: #43812e; font-size: 22px; cursor: pointer; }
+  .travel-nav { display: none; order: 4; width: 100%; margin: 0; padding: 16px 0; border-top: 1px solid #eee; }
+  .travel-nav.is-open { display: flex; flex-direction: column; gap: 20px; }
+  .vx-hero-slider { min-height: 540px; padding: 60px 24px 120px; background-position: 62% center; }
+  .vx-hero-slider h1 { font-size: 40px; }
+  .travel-eyebrow { font-size: 15px; }
+  .travel-hero-copy p { font-size: 16px; line-height: 1.7; }
+  .travel-hero-cta { font-size: 15px; padding: 14px 24px; }
+  .vx-search-Overlap { padding: 0 16px; margin-top: -55px; }
+  .vx-search-tabs { display: flex; }
+  .vx-search-tab { padding: 12px 8px; font-size: 12px; flex: 1; }
+  .vx-search-bar { padding: 18px; }
+  .vx-search-grid { gap: 14px; }
+  .vx-container { padding: 40px 20px; }
+  .travel-benefits { grid-template-columns: 1fr; gap: 24px; }
+  .travel-benefits article { flex-direction: row; }
+  .vx-grid-3, .vx-grid-4 { grid-template-columns: 1fr; }
+  .vx-section-header { align-items: flex-start; }
+  .vx-modal { padding: 20px; }
+  .vx-footer { padding: 40px 20px; }
+}
+@media (max-width: 380px) { .vx-search-grid { grid-template-columns: 1fr; } .vx-brand-title { font-size: 20px; } .travel-brand-mark { display: none; } }
+.travel-seat-layout { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 20px; margin-top: 18px; }
+.travel-seat-layout > * { min-width: 0; }
+.travel-decks { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+@media (max-width: 1100px) { .travel-seat-layout { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 760px) { .travel-decks { grid-template-columns: minmax(0, 1fr); } .travel-seat-layout > .vx-card { padding: 12px; } }

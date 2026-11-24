@@ -1,0 +1,1234 @@
+openapi: 3.0.3
+info:
+  title: Vé Xuyên Việt API
+  version: 0.4.0-draft
+  description: Bản hợp đồng API đề xuất — chưa chốt nhà cung cấp QR, tuổi trẻ em, phụ phí và tỷ lệ hoa hồng. Không phải API
+    đã triển khai.
+servers:
+- url: https://api.example.invalid/api/v1
+  description: Placeholder; chưa có tên miền triển khai
+tags:
+- name: Auth
+- name: Search
+- name: Booking
+- name: Payment
+- name: Tickets
+- name: Operator
+- name: Admin
+- name: Content
+security: &id004
+- sessionCookie: []
+paths:
+  /auth/csrf:
+    get:
+      summary: Nhận CSRF token cho SPA cùng tên miền
+      tags:
+      - Auth
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Csrf'
+      security: &id001 []
+      operationId: get_auth_csrf
+  /auth/register:
+    post:
+      summary: Đăng ký email và mật khẩu
+      tags:
+      - Auth
+      responses:
+        '201':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+        '400': &id002
+          description: Dữ liệu đầu vào không hợp lệ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409': &id006
+          description: Xung đột tồn chỗ / trạng thái / idempotency
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '429': &id003
+          description: Quá giới hạn yêu cầu
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      security: *id001
+      operationId: post_auth_register
+      parameters:
+      - in: header
+        name: X-CSRFToken
+        required: false
+        description: Bắt buộc cho session auth trên request đổi trạng thái; nhà phát triển cấu hình CSRF chính xác
+        schema:
+          type: string
+  /auth/login:
+    post:
+      summary: Đăng nhập tạo phiên làm việc
+      tags:
+      - Auth
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+        '400': *id002
+        '401': &id005
+          description: Chưa xác thực
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '429': *id003
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      security: *id001
+      operationId: post_auth_login
+      parameters:
+      - in: header
+        name: X-CSRFToken
+        required: false
+        description: Bắt buộc cho session auth trên request đổi trạng thái; nhà phát triển cấu hình CSRF chính xác
+        schema:
+          type: string
+  /auth/logout:
+    post:
+      summary: Đăng xuất
+      tags:
+      - Auth
+      responses:
+        '204':
+          description: Thành công
+      security: *id004
+      operationId: post_auth_logout
+      parameters:
+      - in: header
+        name: X-CSRFToken
+        required: false
+        description: Bắt buộc cho session auth trên request đổi trạng thái; nhà phát triển cấu hình CSRF chính xác
+        schema:
+          type: string
+  /me:
+    get:
+      summary: Thông tin tài khoản hiện tại
+      tags:
+      - Auth
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+        '401': *id005
+      operationId: get_me
+  /trips:
+    get:
+      summary: Tìm kiếm và lọc chuyến, giá rẻ
+      tags:
+      - Search
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TripSummary'
+        '400': *id002
+      description: sort=price_asc được tính theo giá khả dụng cho chặng; không dùng giá thấp nhất của toàn tuyến nếu khác
+        chặng.
+      security: *id001
+      parameters:
+      - in: query
+        name: from_location_id
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: to_location_id
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: departure_date
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: sort
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: operator_id
+        required: false
+        schema:
+          type: string
+      operationId: get_trips
+  /trips/{trip_id}/units:
+    get:
+      summary: Sơ đồ chỗ còn khả dụng theo chặng
+      tags:
+      - Search
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TripUnits'
+        '400': *id002
+        '404': &id009
+          description: Không tìm thấy tài nguyên hoặc nằm ngoài phạm vi được cấp
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      security: *id001
+      parameters:
+      - in: path
+        name: trip_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: from_trip_stop_id
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: to_trip_stop_id
+        required: true
+        schema:
+          type: string
+      operationId: get_trips_trip_id_units
+  /holds:
+    post:
+      summary: Giữ chỗ tạm thời 10 phút (toàn bộ hoặc không giữ gì)
+      tags:
+      - Booking
+      responses:
+        '201':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HoldResult'
+        '400': *id002
+        '401': *id005
+        '409': *id006
+        '422': &id007
+          description: Không đáp ứng quy tắc nghiệp vụ hoặc chính sách chưa cấu hình
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      description: Backend bắt buộc tự tính giá; xác nhận tuổi trẻ em và phụ phí theo chính sách cấu hình. Hết hạn không dựa
+        vào đồng hồ client.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateHold'
+      parameters:
+      - in: header
+        name: Idempotency-Key
+        description: Khóa duy nhất cho thao tác tạo; trả lại kết quả nếu gọi lặp
+        required: true
+        schema:
+          type: string
+          minLength: 8
+      - in: header
+        name: X-CSRFToken
+        required: false
+        description: Bắt buộc cho session auth trên request đổi trạng thái; nhà phát triển cấu hình CSRF chính xác
+        schema:
+          type: string
+      operationId: post_holds
+  /bookings/{booking_id}/passengers:
+    put:
+      summary: Cập nhật thông tin hành khách và gán vào phòng
+      tags:
+      - Booking
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '400': *id002
+        '403': &id008
+          description: Không có quyền truy cập
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409': *id006
+        '410': &id010
+          description: Giữ chỗ hết hạn
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '422': *id007
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingPassengersRequest'
+      parameters:
+      - in: path
+        name: booking_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - in: header
+        name: Idempotency-Key
+        description: Khóa duy nhất cho thao tác tạo; trả lại kết quả nếu gọi lặp
+        required: true
+        schema:
+          type: string
+          minLength: 8
+      - in: header
+        name: X-CSRFToken
+        required: false
+        description: Bắt buộc cho session auth trên request đổi trạng thái; nhà phát triển cấu hình CSRF chính xác
+        schema:
+          type: string
+      operationId: put_bookings_booking_id_passengers
+  /bookings/{booking_id}:
+    get:
+      summary: Tra cứu đơn thuộc người đăng nhập
+      tags:
+      - Booking
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '403': *id008
+        '404': *id009
+      parameters:
+      - in: path
+        name: booking_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      operationId: get_bookings_booking_id
+  /me/bookings:
+    get:
+      summary: Lịch sử đặt vé của tôi
+      tags:
+      - Booking
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Booking'
+      operationId: get_me_bookings
+  /bookings/{booking_id}/payment-intents:
+    post:
+      summary: Tạo yêu cầu thanh toán 100% và mã QR
+      tags:
+      - Payment
+      responses:
+        '201':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentIntent'
+        '409': *id006
+        '410': *id010
+        '422': *id007
+      description: Chỉ hỗ trợ cổng có phương thức xác minh thanh toán tự động. Không xác nhận chỉ vì ảnh chuyển khoản.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentIntent'
+      parameters:
+      - in: path
+        name: booking_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - in: header
+        name: Idempotency-Key
+        description: Khóa duy nhất cho thao tác tạo; trả lại kết quả nếu gọi lặp
+        required: true
+        schema:
+          type: string
+          minLength: 8
+      - in: header
+        name: X-CSRFToken
+        required: false
+        description: Bắt buộc cho session auth trên request đổi trạng thái; nhà phát triển cấu hình CSRF chính xác
+        schema:
+          type: string
+      operationId: post_bookings_booking_id_payment_intents
+  /bookings/{booking_id}/payment-status:
+    get:
+      summary: Xem trạng thái đã được Backend đối chiếu
+      tags:
+      - Payment
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentIntent'
+      parameters:
+      - in: path
+        name: booking_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      operationId: get_bookings_booking_id_payment_status
+  /webhooks/payments/{provider}:
+    post:
+      summary: Nhận webhook từ nhà cung cấp thanh toán
+      tags:
+      - Payment
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accepted:
+                    type: boolean
+        '400': *id002
+        '401': *id005
+      description: Nhà cung cấp chưa chốt. Cần chữ ký/đối chiếu API, chống replay, provider_event_id unique, transaction idempotent,
+        xử lý tiền đến muộn thành EXCEPTION.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentWebhookEvent'
+      security:
+      - providerSignature: []
+      parameters:
+      - in: path
+        name: provider
+        required: true
+        schema:
+          type: string
+      operationId: post_webhooks_payments_provider
+  /me/tickets:
+    get:
+      summary: Danh sách vé điện tử
+      tags:
+      - Tickets
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ticket'
+      operationId: get_me_tickets
+  /bookings/{booking_id}/cancellation-requests:
+    post:
+      summary: Gửi yêu cầu đổi/hủy; tính phí theo phiên bản chính sách
+      tags:
+      - Booking
+      responses:
+        '201':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cancellation'
+        '422': *id007
+      description: Chính sách chung + tùy chỉnh hãng chưa chốt chi tiết, không tính giá hoàn mặc định.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCancellation'
+      parameters:
+      - in: path
+        name: booking_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - in: header
+        name: Idempotency-Key
+        description: Khóa duy nhất cho thao tác tạo; trả lại kết quả nếu gọi lặp
+        required: true
+        schema:
+          type: string
+          minLength: 8
+      - in: header
+        name: X-CSRFToken
+        required: false
+        description: Bắt buộc cho session auth trên request đổi trạng thái; nhà phát triển cấu hình CSRF chính xác
+        schema:
+          type: string
+      operationId: post_bookings_booking_id_cancellation_requests
+  /operators/me/vehicles:
+    get:
+      summary: Danh sách phương tiện của hãng hiện tại
+      tags:
+      - Operator
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OperatorVehicle'
+      operationId: get_operators_me_vehicles
+    post:
+      summary: Thêm xe của hãng hiện tại
+      tags:
+      - Operator
+      responses:
+        '201':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperatorVehicle'
+        '403': *id008
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperatorVehicle'
+      parameters:
+      - in: header
+        name: Idempotency-Key
+        description: Khóa duy nhất cho thao tác tạo; trả lại kết quả nếu gọi lặp
+        required: true
+        schema:
+          type: string
+          minLength: 8
+      - in: header
+        name: X-CSRFToken
+        required: false
+        description: Bắt buộc cho session auth trên request đổi trạng thái; nhà phát triển cấu hình CSRF chính xác
+        schema:
+          type: string
+      operationId: post_operators_me_vehicles
+  /operators/me/trips:
+    get:
+      summary: Danh sách chuyến của hãng hiện tại
+      tags:
+      - Operator
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TripSummary'
+      operationId: get_operators_me_trips
+    post:
+      summary: Tạo chuyến
+      tags:
+      - Operator
+      responses:
+        '201':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TripSummary'
+        '403': *id008
+        '422': *id007
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperatorTrip'
+      parameters:
+      - in: header
+        name: Idempotency-Key
+        description: Khóa duy nhất cho thao tác tạo; trả lại kết quả nếu gọi lặp
+        required: true
+        schema:
+          type: string
+          minLength: 8
+      - in: header
+        name: X-CSRFToken
+        required: false
+        description: Bắt buộc cho session auth trên request đổi trạng thái; nhà phát triển cấu hình CSRF chính xác
+        schema:
+          type: string
+      operationId: post_operators_me_trips
+  /operators/me/booking-items:
+    get:
+      summary: Danh sách phòng/giường bán được theo chuyến thuộc hãng
+      tags:
+      - Operator
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+      parameters:
+      - in: query
+        name: trip_id
+        required: false
+        schema:
+          type: string
+      operationId: get_operators_me_booking_items
+  /operators/me/settlements:
+    get:
+      summary: Đối soát hãng theo kỳ
+      tags:
+      - Operator
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Settlement'
+      operationId: get_operators_me_settlements
+  /admin/operators:
+    get:
+      summary: Admin xem các hãng
+      tags:
+      - Admin
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+      operationId: get_admin_operators
+  /admin/settlements:
+    get:
+      summary: Admin xem đối soát đa hãng
+      tags:
+      - Admin
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Settlement'
+      operationId: get_admin_settlements
+  /posts:
+    get:
+      summary: Danh sách bài du lịch, hãng xe, khuyến mãi
+      tags:
+      - Content
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+      security: *id001
+      operationId: get_posts
+  /posts/{slug}:
+    get:
+      summary: Chi tiết bài viết theo slug
+      tags:
+      - Content
+      responses:
+        '200':
+          description: Thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '404': *id009
+      security: *id001
+      parameters:
+      - in: path
+        name: slug
+        required: true
+        schema:
+          type: string
+      operationId: get_posts_slug
+components:
+  schemas:
+    ApiError:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+        request_id:
+          type: string
+    RegisterRequest:
+      type: object
+      required:
+      - email
+      - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 10
+        full_name:
+          type: string
+    LoginRequest:
+      type: object
+      required:
+      - email
+      - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+    Csrf:
+      type: object
+      properties:
+        csrf_token:
+          type: string
+    Me:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        roles:
+          type: array
+          items:
+            type: string
+    TripSummary:
+      type: object
+      required:
+      - id
+      - operator_name
+      - departure_at
+      - from_name
+      - to_name
+      - from_price
+      - currency
+      properties:
+        id:
+          type: string
+          format: uuid
+        operator_name:
+          type: string
+        departure_at:
+          type: string
+          format: date-time
+        from_name:
+          type: string
+        to_name:
+          type: string
+        from_price:
+          type: number
+          minimum: 0
+        currency:
+          type: string
+          example: VND
+        available_units:
+          type: integer
+          minimum: 0
+        vehicle_type:
+          type: string
+    TripUnits:
+      type: object
+      properties:
+        trip_id:
+          type: string
+          format: uuid
+        from_sequence:
+          type: integer
+          minimum: 0
+        to_sequence:
+          type: integer
+          minimum: 1
+        units:
+          type: array
+          items:
+            $ref: '#/components/schemas/TripUnit'
+    TripUnit:
+      type: object
+      required:
+      - id
+      - unit_code
+      - kind
+      - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        unit_code:
+          type: string
+        deck:
+          type: integer
+        row_number:
+          type: integer
+        column_number:
+          type: integer
+        kind:
+          type: string
+          enum:
+          - CABIN
+          - BED
+          - SEAT
+        max_adults:
+          type: integer
+          nullable: true
+        max_children:
+          type: integer
+          nullable: true
+        status:
+          type: string
+          enum:
+          - AVAILABLE
+          - HELD
+          - SOLD
+          - BLOCKED
+        quoted_price:
+          type: number
+          nullable: true
+    HoldUnitInput:
+      type: object
+      required:
+      - trip_unit_id
+      - adult_count
+      - child_count
+      properties:
+        trip_unit_id:
+          type: string
+          format: uuid
+        adult_count:
+          type: integer
+          minimum: 0
+        child_count:
+          type: integer
+          minimum: 0
+    CreateHold:
+      type: object
+      required:
+      - trip_id
+      - from_trip_stop_id
+      - to_trip_stop_id
+      - units
+      properties:
+        trip_id:
+          type: string
+          format: uuid
+        from_trip_stop_id:
+          type: string
+          format: uuid
+        to_trip_stop_id:
+          type: string
+          format: uuid
+        units:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/HoldUnitInput'
+    HoldResult:
+      type: object
+      required:
+      - booking_id
+      - hold_expires_at
+      - booking_status
+      - total_amount
+      properties:
+        booking_id:
+          type: string
+          format: uuid
+        hold_expires_at:
+          type: string
+          format: date-time
+          description: 10 phút từ lúc bắt đầu giữ, Backend xác định
+        booking_status:
+          type: string
+          example: HOLDING
+        total_amount:
+          type: number
+          minimum: 0
+        currency:
+          type: string
+          example: VND
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              trip_unit_id:
+                type: string
+                format: uuid
+    Passenger:
+      type: object
+      required:
+      - client_ref
+      - full_name
+      - kind
+      properties:
+        client_ref:
+          type: string
+          description: Mã tạm do frontend cung cấp trong yêu cầu
+        full_name:
+          type: string
+          minLength: 1
+        kind:
+          type: string
+          enum:
+          - ADULT
+          - CHILD
+        birth_date:
+          type: string
+          format: date
+          nullable: true
+        contact_phone:
+          type: string
+    PassengerAssignment:
+      type: object
+      required:
+      - booking_item_id
+      - passenger_client_refs
+      properties:
+        booking_item_id:
+          type: string
+          format: uuid
+        passenger_client_refs:
+          type: array
+          items:
+            type: string
+          minItems: 1
+    BookingPassengersRequest:
+      type: object
+      required:
+      - passengers
+      - assignments
+      - contact_email
+      properties:
+        contact_email:
+          type: string
+          format: email
+        passengers:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Passenger'
+        assignments:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/PassengerAssignment'
+        pickup_requests:
+          type: array
+          items:
+            $ref: '#/components/schemas/PickupRequest'
+    PickupRequest:
+      type: object
+      required:
+      - booking_item_id
+      - direction
+      - kind
+      properties:
+        booking_item_id:
+          type: string
+          format: uuid
+        direction:
+          type: string
+          enum:
+          - PICKUP
+          - DROPOFF
+        kind:
+          type: string
+          enum:
+          - FIXED
+          - CUSTOM
+        option_id:
+          type: string
+          format: uuid
+          nullable: true
+        requested_address:
+          type: string
+          nullable: true
+    Booking:
+      type: object
+      required:
+      - id
+      - code
+      - status
+      - total_amount
+      - hold_expires_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        status:
+          type: string
+          enum:
+          - HOLDING
+          - PENDING_PAYMENT
+          - CONFIRMED
+          - CANCELLED
+          - EXCEPTION
+          - COMPLETED
+        total_amount:
+          type: number
+        currency:
+          type: string
+        hold_expires_at:
+          type: string
+          format: date-time
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    CreatePaymentIntent:
+      type: object
+      properties:
+        provider:
+          type: string
+          description: Chỉ giá trị nằm trong danh sách provider đã duyệt; chưa chọn nhà cung cấp
+    PaymentIntent:
+      type: object
+      required:
+      - id
+      - booking_id
+      - amount
+      - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        booking_id:
+          type: string
+          format: uuid
+        amount:
+          type: number
+        currency:
+          type: string
+          example: VND
+        status:
+          type: string
+          enum:
+          - CREATED
+          - PENDING
+          - PAID
+          - FAILED
+          - EXCEPTION
+        qr_payload:
+          type: string
+        expires_at:
+          type: string
+          format: date-time
+          nullable: true
+    Ticket:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        booking_item_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+          - ISSUED
+          - CANCELLED
+          - USED
+        issued_at:
+          type: string
+          format: date-time
+    CreateCancellation:
+      type: object
+      required:
+      - kind
+      properties:
+        kind:
+          type: string
+          enum:
+          - CANCEL
+          - CHANGE
+        reason:
+          type: string
+    Cancellation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+        kind:
+          type: string
+        estimated_refund_amount:
+          type: number
+          nullable: true
+          description: Chỉ tính khi chính sách được duyệt
+    OperatorVehicle:
+      type: object
+      required:
+      - registration
+      - vehicle_type_id
+      - layout_id
+      properties:
+        registration:
+          type: string
+        vehicle_type_id:
+          type: string
+          format: uuid
+        layout_id:
+          type: string
+          format: uuid
+    OperatorTrip:
+      type: object
+      required:
+      - route_id
+      - vehicle_id
+      - departure_at
+      properties:
+        route_id:
+          type: string
+          format: uuid
+        vehicle_id:
+          type: string
+          format: uuid
+        departure_at:
+          type: string
+          format: date-time
+    Post:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        slug:
+          type: string
+        summary:
+          type: string
+        published_at:
+          type: string
+          format: date-time
+          nullable: true
+    Settlement:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        operator_id:
+          type: string
+          format: uuid
+        gross_amount:
+          type: number
+        commission_amount:
+          type: number
+          nullable: true
+        payable_amount:
+          type: number
+          nullable: true
+        status:
+          type: string
+    PaymentWebhookEvent:
+      type: object
+      description: Payload thực tế phụ thuộc cổng thanh toán; xác minh chữ ký provider trước khi xử lý.
+      additionalProperties: true
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: sessionid
+      description: Đề xuất Django server-side session cookie, secure + HttpOnly + SameSite; các request thay đổi dữ liệu cần
+        X-CSRFToken.
+    providerSignature:
+      type: apiKey
+      in: header
+      name: X-Provider-Signature
+      description: Tên header và thuật toán phải thay theo cổng thanh toán được lựa chọn.

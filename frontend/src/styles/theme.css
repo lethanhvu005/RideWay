@@ -1,0 +1,781 @@
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  /* Exact GoWilds / mona-tour.monamedia.net Palette (Green + Orange + Dark Forest) */
+  --gw-green: #63ab45;
+  --gw-green-dark: #4e8c33;
+  --gw-green-light: #ebf5e6;
+  --gw-orange: #f7921e;
+  --gw-dark: #1c231f;
+  --gw-dark-card: #232c26;
+  --gw-bg: #ffffff;
+  --gw-bg-soft: #f3f8f6;
+  --gw-text: #1c231f;
+  --gw-muted: #68726c;
+  --gw-border: #e2ebe5;
+  --gw-danger: #dc2626;
+  --gw-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+  --gw-shadow-lg: 0 20px 45px rgba(0, 0, 0, 0.14);
+
+  /* Compatibility aliases for existing components */
+  --vx-bg: #ffffff;
+  --vx-surface: #ebf5e6;
+  --vx-surface-strong: #d8edd0;
+  --vx-primary: #63ab45;
+  --vx-primary-dark: #4e8c33;
+  --vx-primary-darker: #1c231f;
+  --vx-text: #1c231f;
+  --vx-muted: #68726c;
+  --vx-border: #d5e5ce;
+  --vx-border-neutral: #e5e7eb;
+  --vx-danger: #dc2626;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Be Vietnam Pro', 'Work Sans', system-ui, -apple-system, sans-serif;
+  background-color: var(--gw-bg);
+  color: var(--gw-text);
+  line-height: 1.7;
+  font-size: 15px;
+  overflow-x: hidden;
+}
+
+/* 1. GoWilds Topbar (#1C231F) */
+.gw-topbar {
+  background: var(--gw-dark);
+  color: #cfd6d1;
+  font-size: 13px;
+  padding: 10px 32px;
+}
+
+.gw-topbar-inner {
+  max-width: 1290px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.gw-topbar-left {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.gw-topbar-left span i {
+  color: var(--gw-green);
+  margin-right: 6px;
+}
+
+.gw-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.gw-book-now-top {
+  background: var(--gw-green);
+  color: #fff;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+}
+
+.gw-portal-pill {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.gw-portal-pill.active,
+.gw-portal-pill:hover {
+  background: var(--gw-green);
+  border-color: var(--gw-green);
+}
+
+/* 2. GoWilds Main White Header */
+.gw-header {
+  background: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.gw-header-inner {
+  max-width: 1290px;
+  margin: 0 auto;
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.gw-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.gw-logo-mark {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--gw-green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 900;
+  box-shadow: 0 6px 14px rgba(99, 171, 69, 0.35);
+}
+
+.gw-logo-text {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--gw-dark);
+  letter-spacing: -0.5px;
+}
+
+.gw-logo-text span {
+  color: var(--gw-green);
+}
+
+.gw-nav {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+}
+
+.gw-nav a {
+  text-decoration: none;
+  color: var(--gw-dark);
+  font-weight: 600;
+  font-size: 15px;
+  transition: color 0.2s;
+}
+
+.gw-nav a:hover {
+  color: var(--gw-green);
+}
+
+.gw-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gw-user-circle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--gw-bg-soft);
+  border: 1px solid var(--gw-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* 3. GoWilds Fullscreen Hero Slider */
+.gw-hero {
+  position: relative;
+  min-height: 620px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  padding: 90px 32px 150px;
+  color: #ffffff;
+}
+
+.gw-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(28, 35, 31, 0.82) 0%, rgba(28, 35, 31, 0.52) 60%, rgba(28, 35, 31, 0.3) 100%);
+}
+
+.gw-hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1290px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.gw-hero-sub {
+  display: inline-block;
+  background: var(--gw-orange);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 6px 18px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  transform: rotate(-1.5deg);
+  box-shadow: 0 6px 16px rgba(247, 146, 30, 0.35);
+}
+
+.gw-hero h1 {
+  font-size: 54px;
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 18px;
+  max-width: 720px;
+  letter-spacing: -1px;
+}
+
+.gw-hero p {
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 620px;
+  margin: 0 0 28px;
+}
+
+/* GoWilds Signature Pill CTA Button with Circle Arrow */
+.gw-btn-green {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--gw-green);
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s;
+}
+
+.gw-btn-green:hover {
+  background: var(--gw-green-dark);
+  transform: translateY(-2px);
+}
+
+.gw-btn-orange {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--gw-orange);
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* 4. GoWilds Overlapping Horizontal Search Bar */
+.gw-search-wrap {
+  max-width: 1290px;
+  margin: -70px auto 0;
+  padding: 0 32px;
+  position: relative;
+  z-index: 30;
+}
+
+.gw-search-box {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px 28px;
+  box-shadow: var(--gw-shadow-lg);
+  display: grid;
+  grid-template-columns: 1.2fr 1.2fr 1.1fr 1fr auto;
+  gap: 18px;
+  align-items: center;
+}
+
+.gw-search-field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-right: 1px solid var(--gw-border);
+  padding-right: 14px;
+}
+
+.gw-search-field:last-of-type {
+  border-right: none;
+}
+
+.gw-field-icon {
+  font-size: 24px;
+  color: var(--gw-green);
+}
+
+.gw-field-label {
+  font-size: 12px;
+  color: var(--gw-muted);
+  font-weight: 600;
+  display: block;
+}
+
+.gw-field-control {
+  border: none;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--gw-dark);
+  width: 100%;
+  background: transparent;
+  padding: 2px 0;
+  outline: none;
+}
+
+/* GoWilds Section Subtitle Pill & Headings */
+.gw-section {
+  max-width: 1290px;
+  margin: 0 auto;
+  padding: 80px 32px;
+}
+
+.gw-sub-pill {
+  display: inline-block;
+  background: var(--gw-green-light);
+  color: var(--gw-green);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 6px 18px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.gw-sub-pill-orange {
+  display: inline-block;
+  background: rgba(247, 146, 30, 0.16);
+  color: var(--gw-orange);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 6px 18px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.gw-sec-title {
+  font-size: 38px;
+  font-weight: 800;
+  color: var(--gw-dark);
+  margin: 0 0 16px;
+  line-height: 1.22;
+  letter-spacing: -0.6px;
+}
+
+/* 5. GoWilds 5-Column "Hoạt động phổ biến" Tall Rounded Photo Cards */
+.gw-activity-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+  margin-top: 32px;
+}
+
+.gw-activity-card {
+  position: relative;
+  height: 310px;
+  border-radius: 16px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+  padding: 16px;
+  box-shadow: var(--gw-shadow);
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.gw-activity-card:hover {
+  transform: translateY(-6px);
+}
+
+.gw-activity-pill {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 12px 14px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--gw-dark);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.gw-activity-arrow {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gw-green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* 6. GoWilds "18 Năm kinh nghiệm / Du lịch tuyệt vời" 3-Column Split About Section */
+.gw-about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr 1.1fr;
+  gap: 36px;
+  align-items: center;
+}
+
+.gw-exp-box {
+  background: var(--gw-green);
+  color: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.gw-exp-num {
+  font-size: 48px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* 7. GoWilds Dark Forest Section ("Hoạt động nổi bật / Cảm giác phiêu lưu") */
+.gw-dark-section {
+  background: var(--gw-dark);
+  color: #ffffff;
+  padding: 80px 32px;
+}
+
+.gw-dark-inner {
+  max-width: 1290px;
+  margin: 0 auto;
+}
+
+.gw-dark-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 0.9fr;
+  gap: 28px;
+  margin-top: 36px;
+  align-items: stretch;
+}
+
+.gw-tab-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.gw-tab-btn {
+  background: var(--gw-dark-card);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 18px 16px;
+  font-weight: 700;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s;
+}
+
+.gw-tab-btn.active,
+.gw-tab-btn:hover {
+  background: var(--gw-orange);
+  border-color: var(--gw-orange);
+}
+
+/* 8. GoWilds Tour / Bus Trip Cards ("Trải nghiệm tuyệt vời / Các địa điểm thú vị") */
+.gw-tour-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+.gw-tour-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--gw-shadow);
+  border: 1px solid var(--gw-border);
+  transition: transform 0.25s;
+}
+
+.gw-tour-card:hover {
+  transform: translateY(-6px);
+}
+
+.gw-tour-img {
+  height: 215px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.gw-tour-heart {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gw-tour-badge-left {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--gw-orange);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.gw-tour-body {
+  padding: 20px;
+  position: relative;
+}
+
+.gw-tour-metrics {
+  background: var(--gw-bg-soft);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gw-muted);
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.gw-stars {
+  color: var(--gw-orange);
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+/* 9. GoWilds 6-Column Feature Grid */
+.gw-features-6 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.gw-feature-box {
+  background: #ffffff;
+  border: 1px solid var(--gw-border);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  box-shadow: var(--gw-shadow);
+}
+
+.gw-feature-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--gw-green-light);
+  color: var(--gw-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+/* 10. GoWilds Pre-Footer CTA & Dark Footer */
+.gw-cta-bar {
+  background: var(--gw-bg-soft);
+  border-top: 1px solid var(--gw-border);
+  padding: 36px 32px;
+}
+
+.gw-cta-inner {
+  max-width: 1290px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* Compatibility classes for child components */
+.vx-container {
+  max-width: 1290px;
+  margin: 0 auto;
+  padding: 44px 32px;
+}
+.vx-card {
+  background: #ffffff;
+  border: 1px solid var(--gw-border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--gw-shadow);
+}
+.vx-btn-primary {
+  background: var(--gw-green);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.vx-btn-outline {
+  background: var(--gw-green-light);
+  color: var(--gw-green-dark);
+  border: 1px solid #cce3c1;
+  border-radius: 10px;
+  padding: 9px 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.vx-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.vx-badge-green {
+  background: var(--gw-green-light);
+  color: var(--gw-green-dark);
+}
+.vx-badge-amber {
+  background: #fef3c7;
+  color: #b45309;
+}
+.vx-badge-gray {
+  background: #f1f5f9;
+  color: #475569;
+}
+.vx-price-big {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--gw-green);
+}
+.vx-input,
+.vx-select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 14px;
+}
+.vx-field-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gw-dark);
+  margin-bottom: 6px;
+}
+.vx-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+.vx-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.vx-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 24px;
+}
+.vx-section-kicker {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--gw-green);
+  text-transform: uppercase;
+}
+.vx-section-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--gw-dark);
+  margin: 4px 0 0;
+}
+.vx-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.68);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.vx-modal {
+  background: #ffffff;
+  border-radius: 18px;
+  max-width: 780px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 28px;
+}
+.vx-footer {
+  background: var(--gw-dark);
+  color: #cfd6d1;
+  padding: 60px 32px 32px;
+}
+.vx-footer-inner {
+  max-width: 1290px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  gap: 32px;
+}
+
+@media (max-width: 1024px) {
+  .gw-search-box,
+  .gw-activity-grid,
+  .gw-about-grid,
+  .gw-dark-grid,
+  .gw-tour-grid-4,
+  .gw-features-6,
+  .vx-grid-3,
+  .vx-grid-4,
+  .vx-footer-inner {
+    grid-template-columns: 1fr;
+  }
+}

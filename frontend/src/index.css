@@ -1,0 +1,7 @@
+html { scroll-behavior: smooth; scroll-padding-top: 110px; color-scheme: light; }
+body { margin: 0; min-width: 320px; }
+#root { min-height: 100vh; width: 100%; }
+button, input, select, textarea { font: inherit; }
+a, button, input, select { -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 3px solid #e6a23c; outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }

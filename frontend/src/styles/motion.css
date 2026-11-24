@@ -1,0 +1,33 @@
+﻿/* Motion stays separate from the existing layout and booking styles. */
+.gw-hero { overflow: hidden; isolation: isolate; }
+.gw-hero::before { z-index: 1; pointer-events: none; }
+.motion-hero-image { position: absolute; inset: 0; background-size: cover; background-position: center; pointer-events: none; animation: hero-scenery 1.2s ease-out both; }
+.motion-hero-text { animation: hero-copy .65s cubic-bezier(.2,.7,.2,1) both; }
+.gw-hero h1.motion-hero-text { animation-delay: .08s; }
+.gw-hero p.motion-hero-text { animation-delay: .16s; }
+@keyframes hero-scenery { from { opacity: 0; transform: scale(1.045); } to { opacity: 1; transform: scale(1); } }
+@keyframes hero-copy { from { opacity: 0; translate: 0 20px; } to { opacity: 1; translate: 0 0; } }
+.motion-pending { opacity: 0; translate: 0 24px; }
+.motion-visible { animation: reveal-section .65s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes reveal-section { from { opacity: 0; translate: 0 24px; } to { opacity: 1; translate: 0 0; } }
+.motion-pending:focus-within { opacity: 1; translate: none; }
+.gw-nav a { position: relative; }
+.gw-nav a::after { content: ''; position: absolute; left: 0; right: 0; bottom: -7px; height: 2px; background: var(--gw-green); transform: scaleX(0); transform-origin: left; transition: transform .22s ease; }
+.gw-nav a:hover::after, .gw-nav a:focus-visible::after { transform: scaleX(1); }
+.gw-tour-card, .gw-activity-card { transition: transform .3s ease, box-shadow .3s ease; }
+.gw-btn-green, .gw-btn-orange, .vx-btn-primary, .vx-btn-outline, .gw-tab-btn { transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease; }
+@media (hover: hover) and (pointer: fine) {
+  .gw-tour-card:hover, .gw-activity-card:hover { transform: translateY(-7px); box-shadow: 0 18px 36px #1c231f20; }
+  .gw-btn-green:hover, .gw-btn-orange:hover, .vx-btn-primary:not(:disabled):hover { transform: translateY(-3px); box-shadow: 0 8px 20px #43812e30; }
+}
+.gw-btn-green:active, .gw-btn-orange:active, .vx-btn-primary:not(:disabled):active { transform: scale(.97); }
+.gw-search-field:focus-within { background-color: #f0f7ed; transition: background-color .2s ease; }
+.vx-modal { animation: modal-arrive .25s ease-out both; }
+@keyframes modal-arrive { from { opacity: 0; transform: translateY(14px) scale(.98); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .motion-pending { opacity: 1; translate: none; }
+  .gw-tour-card:hover, .gw-activity-card:hover, .gw-btn-green:hover, .gw-btn-orange:hover, .vx-btn-primary:hover { transform: none; }
+}
+@media print { .motion-pending { opacity: 1; translate: none; } }

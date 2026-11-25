@@ -1,6 +1,8 @@
 """Shared base models, permissions, and DRF exception handler across domain apps."""
+from decimal import DecimalException
 import uuid
-from django.db import models
+from django.core.exceptions import ValidationError as DjangoValidationError
+from django.db import IntegrityError, models
 from rest_framework import status
 from rest_framework.permissions import BasePermission
 from rest_framework.response import Response
@@ -17,7 +19,7 @@ class BaseRecord(models.Model):
 
 
 def custom_exception_handler(exc, context):
-    """Standardize DRF errors to {'detail', 'code', 'request_id'} per API Design v1.0 §3."""
+    """Standardize DRF and domain errors to {'detail', 'code', 'request_id'} per API Design v1.0 §3."""
     request = context.get('request')
     req_id = (
         request.headers.get('X-Request-Id')
@@ -33,7 +35,33 @@ def custom_exception_handler(exc, context):
             'code': str(code).upper(),
             'request_id': req_id,
         }
-    return response
+        return response
+
+    if isinstance(exc, DjangoValidationError):
+        msg = '; '.join(exc.messages) if hasattr(exc, 'messages') else str(exc)
+        return Response(
+            {'detail': msg, 'code': 'VALIDATION_ERROR', 'request_id': req_id},
+            status=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        )
+    if isinstance(exc, IntegrityError):
+        return Response(
+            {
+                'detail': 'Database constraint violation or duplicate record.',
+                'code': 'CONFLICT',
+                'request_id': req_id,
+            },
+            status=status.HTTP_409_CONFLICT,
+        )
+    if isinstance(exc, (KeyError, ValueError, TypeError, DecimalException)):
+        return Response(
+            {
+                'detail': f'Invalid or missing input parameter: {exc}',
+                'code': 'INVALID_INPUT',
+                'request_id': req_id,
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    return None
 
 
 def api_error(detail: str, code: str, http_status=status.HTTP_400_BAD_REQUEST, request=None):

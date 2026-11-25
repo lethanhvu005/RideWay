@@ -20,9 +20,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() in ('true', '1', 'yes')
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 if not SECRET_KEY:
+    if not DEBUG:
+        raise RuntimeError('DJANGO_SECRET_KEY environment variable is required when DEBUG=False.')
     # Keep a stable local development key outside version control.
     from django.core.management.utils import get_random_secret_key
     local_key_path = BASE_DIR / '.django-secret-key'
@@ -30,10 +35,11 @@ if not SECRET_KEY:
         local_key_path.write_text(get_random_secret_key(), encoding='utf-8')
     SECRET_KEY = local_key_path.read_text(encoding='utf-8').strip()
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    h.strip()
+    for h in os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,testserver').split(',')
+    if h.strip()
+]
 
 
 # Application definition
@@ -75,6 +81,19 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
     'EXCEPTION_HANDLER': 'common.custom_exception_handler',
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+        'rest_framework.throttling.ScopedRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': os.environ.get('DRF_THROTTLE_ANON', '300/min'),
+        'user': os.environ.get('DRF_THROTTLE_USER', '600/min'),
+        'login': os.environ.get('DRF_THROTTLE_LOGIN', '10/min'),
+        'register': os.environ.get('DRF_THROTTLE_REGISTER', '10/min'),
+        'password_reset': os.environ.get('DRF_THROTTLE_PASSWORD_RESET', '10/min'),
+        'holds': os.environ.get('DRF_THROTTLE_HOLDS', '30/min'),
+    },
 }
 
 MIDDLEWARE = [
@@ -162,8 +181,11 @@ STATIC_URL = 'static/'
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
+EMAIL_BACKEND = os.environ.get('DJANGO_EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
+DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_DEFAULT_FROM_EMAIL', 'no-reply@vexuyenviet.vn')
+
 MAILERS = {
     'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
+        'BACKEND': EMAIL_BACKEND,
     },
 }

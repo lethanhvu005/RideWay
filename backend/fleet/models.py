@@ -44,7 +44,16 @@ class LayoutUnit(BaseRecord):
         db_table = 'layout_units'
         constraints = [
             models.UniqueConstraint(fields=['layout', 'unit_code'], name='uq_layout_unit_code'),
+            models.UniqueConstraint(
+                fields=['layout', 'deck', 'row_number', 'column_number'],
+                name='uq_layout_unit_grid_coord',
+            ),
             models.CheckConstraint(condition=Q(deck__gte=1, deck__lte=2), name='ck_layout_unit_deck'),
+            models.CheckConstraint(
+                condition=(Q(max_adults__isnull=True) | Q(max_adults__gte=1))
+                & (Q(max_children__isnull=True) | Q(max_children__gte=0)),
+                name='ck_layout_unit_capacity',
+            ),
         ]
 
 

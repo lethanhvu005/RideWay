@@ -42,6 +42,9 @@ class AuditLog(BaseRecord):
 
     class Meta:
         db_table = 'audit_logs'
+        indexes = [
+            models.Index(fields=['resource_type', 'resource_id', '-created_at'], name='ix_audit_resource_lookup'),
+        ]
 
 
 class OutboxEvent(BaseRecord):
@@ -53,3 +56,6 @@ class OutboxEvent(BaseRecord):
 
     class Meta:
         db_table = 'outbox_events'
+        indexes = [
+            models.Index(fields=['published_at', 'created_at'], name='ix_outbox_unpublished'),
+        ]

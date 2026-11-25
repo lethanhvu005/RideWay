@@ -172,25 +172,35 @@ def assign_passengers_and_pickup(*, customer, booking_id, passengers_data, item_
         if not items:
             raise BookingStateError('Booking has no items.')
 
+        if not passengers_data or not item_assignments:
+            raise BookingValidationError('Passengers and item_assignments are required for all booked units.')
+
         BookingItemPassenger.objects.filter(item__booking=booking).delete()
         BookingPassenger.objects.filter(booking=booking).delete()
         PickupRequest.objects.filter(booking_item__booking=booking).delete()
 
         created_passengers = {}
         for idx, p in enumerate(passengers_data):
+            full_name = (p.get('full_name') or '').strip()
+            kind = p.get('kind')
+            if not full_name or kind not in ('ADULT', 'CHILD'):
+                raise BookingValidationError('Each passenger requires a non-empty full_name and valid kind (ADULT/CHILD).')
             key = str(p.get('client_ref', idx))
             created_passengers[key] = BookingPassenger.objects.create(
                 booking=booking,
-                full_name=p['full_name'].strip(),
-                kind=p['kind'],
+                full_name=full_name,
+                kind=kind,
                 birth_date=p.get('birth_date'),
                 contact_phone=(p.get('contact_phone') or '').strip(),
             )
 
+        assigned_item_ids = set()
         for assign in item_assignments:
-            item = items.get(str(assign['booking_item_id']))
+            item_id_str = str(assign.get('booking_item_id', ''))
+            item = items.get(item_id_str)
             if not item:
                 raise BookingValidationError('Invalid booking_item_id for this booking.')
+            assigned_item_ids.add(item_id_str)
             adults = 0
             children = 0
             for ref in assign.get('passenger_refs', []):
@@ -211,6 +221,9 @@ def assign_passengers_and_pickup(*, customer, booking_id, passengers_data, item_
             if adults != item.adult_count or children != item.child_count:
                 raise BookingValidationError('Assigned passenger counts must match held item counts.')
 
+        if assigned_item_ids != set(items.keys()):
+            raise BookingValidationError('Every booked unit must have valid passengers assigned.')
+
         pickup_fee_total = Decimal('0.00')
         has_unaccepted_custom = False
         if pickup_data:
@@ -219,7 +232,7 @@ def assign_passengers_and_pickup(*, customer, booking_id, passengers_data, item_
             for req in pickup_data:
                 direction = req['direction']
                 kind = req['kind']
-                if kind == 'FIXED':
+                if kind in ('FIXED', 'ZONE'):
                     opt = PickupOption.objects.filter(
                         id=req.get('option_id'), operator_id=operator_id, is_active=True
                     ).first()
@@ -260,6 +273,7 @@ def assign_passengers_and_pickup(*, customer, booking_id, passengers_data, item_
 
 
 def operator_quote_pickup(*, operator_ids, pickup_id, fee_amount):
+    now = timezone.now()
     with transaction.atomic():
         pr = (
             PickupRequest.objects.select_for_update()
@@ -269,6 +283,9 @@ def operator_quote_pickup(*, operator_ids, pickup_id, fee_amount):
         )
         if not pr:
             raise BookingStateError('PickupRequest not found for this operator.')
+        booking = Booking.objects.select_for_update().get(id=pr.booking_item.booking_id)
+        if booking.status not in ('HOLDING', 'PENDING_PAYMENT') or booking.hold_expires_at <= now:
+            raise BookingStateError('Booking hold has expired.')
         fee = Decimal(str(fee_amount))
         if fee < 0:
             raise BookingValidationError('Fee must be >= 0.')
@@ -276,7 +293,6 @@ def operator_quote_pickup(*, operator_ids, pickup_id, fee_amount):
         pr.status = 'QUOTED'
         pr.save(update_fields=['fee_snapshot', 'status', 'updated_at'])
 
-        booking = Booking.objects.select_for_update().get(id=pr.booking_item.booking_id)
         items = list(booking.items.all())
         base_total = sum((it.unit_price + it.child_surcharge) for it in items)
         pickup_fees = sum(
@@ -292,10 +308,13 @@ def operator_quote_pickup(*, operator_ids, pickup_id, fee_amount):
 
 
 def accept_booking_quote(*, customer, booking_id, expected_total_amount):
+    now = timezone.now()
     with transaction.atomic():
         booking = Booking.objects.select_for_update().filter(id=booking_id, customer=customer).first()
         if not booking:
             raise BookingStateError('Booking not found.')
+        if booking.status not in ('HOLDING', 'PENDING_PAYMENT') or booking.hold_expires_at <= now:
+            raise BookingStateError('Booking hold has expired.')
         pending_pickups = PickupRequest.objects.filter(booking_item__booking=booking, status='PENDING').exists()
         if pending_pickups:
             raise BookingValidationError('Custom pickup has not been quoted by operator yet (API-12).')

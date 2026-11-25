@@ -77,6 +77,10 @@ class CommissionAgreement(BaseRecord):
                 condition=Q(percentage__gte=0, percentage__lte=100) | Q(percentage__isnull=True),
                 name='ck_commission_pct',
             ),
+            models.CheckConstraint(
+                condition=Q(effective_to__isnull=True) | Q(effective_to__gte=F('effective_from')),
+                name='ck_commission_date_order',
+            ),
         ]
 
 
@@ -108,4 +112,5 @@ class SettlementLine(BaseRecord):
         db_table = 'settlement_lines'
         constraints = [
             models.UniqueConstraint(fields=['settlement', 'booking_item'], name='uq_settlement_line'),
+            models.UniqueConstraint(fields=['booking_item'], name='uq_settlement_line_single_booking_item'),
         ]

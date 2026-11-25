@@ -1,9 +1,8 @@
 openapi: 3.0.3
 info:
   title: Vé Xuyên Việt API
-  version: 0.4.0-draft
-  description: Bản hợp đồng API đề xuất — chưa chốt nhà cung cấp QR, tuổi trẻ em, phụ phí và tỷ lệ hoa hồng. Không phải API
-    đã triển khai.
+  version: 1.0.0-p0
+  description: Hợp đồng OpenAPI 3.0.3 đã đồng bộ với mã nguồn P0 Backend (Django 5.2 + DRF + PostgreSQL 16).
 servers:
 - url: https://api.example.invalid/api/v1
   description: Placeholder; chưa có tên miền triển khai
@@ -130,6 +129,48 @@ paths:
         description: Bắt buộc cho session auth trên request đổi trạng thái; nhà phát triển cấu hình CSRF chính xác
         schema:
           type: string
+  /auth/password-reset/request:
+    post:
+      summary: Yêu cầu khôi phục mật khẩu qua email (không trả token ra HTTP response)
+      tags:
+      - Auth
+      security: *id001
+      operationId: post_auth_password_reset_request
+      responses:
+        '200':
+          description: Phản hồi đồng nhất chống dò tài khoản email
+  /auth/password-reset/confirm:
+    post:
+      summary: Xác nhận đặt lại mật khẩu mới theo Django Password Validators
+      tags:
+      - Auth
+      security: *id001
+      operationId: post_auth_password_reset_confirm
+      responses:
+        '200':
+          description: Thành công
+        '400': *id002
+        '422': *id007
+  /auth/email-verification/request:
+    post:
+      summary: Yêu cầu gửi lại email xác minh tài khoản
+      tags:
+      - Auth
+      operationId: post_auth_email_verification_request
+      responses:
+        '200':
+          description: Đã gửi hướng dẫn xác minh vào email
+  /auth/email-verification/confirm:
+    post:
+      summary: Xác nhận địa chỉ email bằng uid và token từ email
+      tags:
+      - Auth
+      security: *id001
+      operationId: post_auth_email_verification_confirm
+      responses:
+        '200':
+          description: Thành công
+        '400': *id002
   /me:
     get:
       summary: Thông tin tài khoản hiện tại
@@ -189,6 +230,24 @@ paths:
         schema:
           type: string
       operationId: get_trips
+  /trips/{trip_id}:
+    get:
+      summary: Chi tiết chuyến xe, danh sách trạm dừng, bảng giá theo chặng và điểm đón trả
+      tags:
+      - Search
+      security: *id001
+      operationId: get_trip_detail
+      parameters:
+      - in: path
+        name: trip_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Thành công
+        '404': *id009
   /trips/{trip_id}/units:
     get:
       summary: Sơ đồ chỗ còn khả dụng theo chặng
@@ -515,6 +574,139 @@ paths:
         schema:
           type: string
       operationId: post_bookings_booking_id_cancellation_requests
+  /operators/register:
+    post:
+      summary: Đăng ký mở hãng xe mới (status=DRAFT) và gán người tạo làm OWNER
+      tags:
+      - Operator
+      operationId: post_operators_register
+      responses:
+        '201':
+          description: Thành công
+  /operators/me:
+    get:
+      summary: Xem thông tin hồ sơ hãng xe hiện tại
+      tags:
+      - Operator
+      operationId: get_operators_me
+      responses:
+        '200':
+          description: Thành công
+    patch:
+      summary: Cập nhật thông tin hồ sơ hãng xe (OWNER/MANAGER)
+      tags:
+      - Operator
+      operationId: patch_operators_me
+      responses:
+        '200':
+          description: Thành công
+  /operators/me/memberships:
+    get:
+      summary: Danh sách nhân viên thuộc hãng xe
+      tags:
+      - Operator
+      operationId: get_operators_me_memberships
+      responses:
+        '200':
+          description: Thành công
+    post:
+      summary: Chủ hãng xe (OWNER) thêm hoặc cập nhật vai trò nhân viên (MANAGER/STAFF)
+      tags:
+      - Operator
+      operationId: post_operators_me_memberships
+      responses:
+        '201':
+          description: Thành công
+  /operators/me/vehicles/{vehicle_id}:
+    patch:
+      summary: Cập nhật thông tin phương tiện của hãng
+      tags:
+      - Operator
+      operationId: patch_operators_me_vehicle
+      parameters:
+      - in: path
+        name: vehicle_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Thành công
+  /operators/me/routes/{route_id}:
+    patch:
+      summary: Cập nhật tuyến đường của hãng
+      tags:
+      - Operator
+      operationId: patch_operators_me_route
+      parameters:
+      - in: path
+        name: route_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Thành công
+  /operators/me/trips/{trip_id}:
+    patch:
+      summary: Cập nhật giờ chạy hoặc đổi phương tiện cùng sơ đồ
+      tags:
+      - Operator
+      operationId: patch_operators_me_trip
+      parameters:
+      - in: path
+        name: trip_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Thành công
+  /operators/me/trips/{trip_id}/passengers:
+    get:
+      summary: Danh sách hành khách và trạng thái vé theo chuyến xe của hãng
+      tags:
+      - Operator
+      operationId: get_operators_me_trip_passengers
+      parameters:
+      - in: path
+        name: trip_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Thành công
+  /operators/me/check-in:
+    post:
+      summary: Soát vé QR điện tử ký số HMAC (băm SHA-256 tại Backend)
+      tags:
+      - Tickets
+      operationId: post_operators_me_check_in
+      responses:
+        '201':
+          description: Check-in thành công (status=USED)
+        '422': *id007
+  /admin/cancellation-requests/{request_id}/decision:
+    post:
+      summary: Duyệt hoặc từ chối yêu cầu hủy vé (tự động giải phóng InventoryAllocation và hủy Ticket khi APPROVED)
+      tags:
+      - Admin
+      operationId: post_admin_cancellation_decision
+      parameters:
+      - in: path
+        name: request_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '201':
+          description: Thành công
   /operators/me/vehicles:
     get:
       summary: Danh sách phương tiện của hãng hiện tại
@@ -1112,6 +1304,9 @@ components:
           format: uuid
         code:
           type: string
+        qr_token:
+          type: string
+          description: Chuỗi token QR được ký số HMAC dành cho chủ vé; Backend chỉ lưu bản băm SHA-256 trong DB
         booking_item_id:
           type: string
           format: uuid

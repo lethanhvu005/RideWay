@@ -20,6 +20,7 @@ from common import IsOperatorMember, api_error, get_active_operator_ids
 
 class HoldCreateView(APIView):
     permission_classes = [IsAuthenticated]
+    throttle_scope = 'holds'
 
     def post(self, request):
         idem_key = request.headers.get('Idempotency-Key') or request.data.get('idempotency_key')

@@ -7,15 +7,26 @@ from rest_framework.views import APIView
 from bookings.models import Booking
 from common import IsOperatorMember, api_error, get_active_operator_ids
 from payments.models import Ticket
-from payments.services import PaymentError, check_in_ticket, create_vnpay_payment_intent, process_vnpay_ipn
+from payments.services import (
+    PaymentError,
+    build_signed_qr_token,
+    check_in_ticket,
+    create_vnpay_payment_intent,
+    process_vnpay_ipn,
+)
 
 
 class PaymentIntentCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, booking_id):
+        require_pax = bool(request.data.get('require_passengers', False))
         try:
-            intent = create_vnpay_payment_intent(customer=request.user, booking_id=booking_id)
+            intent = create_vnpay_payment_intent(
+                customer=request.user,
+                booking_id=booking_id,
+                require_passengers=require_pax,
+            )
         except PaymentError as exc:
             return api_error(str(exc), 'PAYMENT_INTENT_ERROR', status.HTTP_422_UNPROCESSABLE_ENTITY, request)
         return Response(
@@ -83,7 +94,7 @@ class MyTicketsView(APIView):
                 {
                     'id': str(tk.id),
                     'code': tk.code,
-                    'qr_token_hash': tk.qr_token_hash,
+                    'qr_token': build_signed_qr_token(tk.code, str(tk.booking_item_id)),
                     'status': tk.status,
                     'issued_at': tk.issued_at,
                     'unit_code': tk.booking_item.trip_unit.unit_code,
@@ -103,7 +114,7 @@ class OperatorCheckInView(APIView):
         if not qr_token:
             return api_error('qr_token is required.', 'INVALID_INPUT', status.HTTP_400_BAD_REQUEST, request)
         try:
-            tk = check_in_ticket(operator_ids=op_ids, qr_token=qr_token)
+            tk = check_in_ticket(operator_ids=op_ids, qr_token=qr_token, actor=request.user)
         except PaymentError as exc:
             return api_error(str(exc), 'CHECKIN_FAILED', status.HTTP_422_UNPROCESSABLE_ENTITY, request)
         return Response({'ticket_id': str(tk.id), 'code': tk.code, 'status': tk.status}, status=status.HTTP_201_CREATED)

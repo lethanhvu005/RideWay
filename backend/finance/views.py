@@ -6,10 +6,15 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from common import IsOperatorManagerOrOwner, IsPlatformAdmin, api_error, get_active_operator_ids
+from common import IsOperatorManagerOrOwner, IsPlatformAdmin, IsPlatformStaffOrAdmin, api_error, get_active_operator_ids
 from content.models import AuditLog
 from finance.models import CancellationRequest, CommissionAgreement, PolicyVersion, Refund, Settlement
-from finance.services import SettlementError, approve_settlement, submit_cancellation_request
+from finance.services import (
+    SettlementError,
+    approve_settlement,
+    decide_cancellation_request,
+    submit_cancellation_request,
+)
 
 
 class CancellationRequestCreateView(APIView):
@@ -145,7 +150,7 @@ class AdminCommissionAgreementsView(APIView):
 
 
 class AdminCancellationRequestsView(APIView):
-    permission_classes = [IsPlatformAdmin]
+    permission_classes = [IsPlatformStaffOrAdmin]
 
     def get(self, request):
         rows = list(
@@ -157,39 +162,28 @@ class AdminCancellationRequestsView(APIView):
 
 
 class AdminCancellationDecisionView(APIView):
-    permission_classes = [IsPlatformAdmin]
+    permission_classes = [IsPlatformStaffOrAdmin]
 
     def post(self, request, request_id):
         decision = request.data.get('decision')
         if decision not in ('APPROVED', 'REJECTED'):
             return api_error('decision must be APPROVED or REJECTED.', 'INVALID_DECISION', status.HTTP_400_BAD_REQUEST, request)
-        with transaction.atomic():
-            cr = CancellationRequest.objects.select_for_update().filter(id=request_id).first()
-            if not cr:
-                return api_error('CancellationRequest not found.', 'NOT_FOUND', status.HTTP_404_NOT_FOUND, request)
-            cr.status = decision
-            cr.save(update_fields=['status', 'updated_at'])
-            refund_id = None
-            if decision == 'APPROVED' and request.data.get('approved_refund_amount') is not None:
-                rf = Refund.objects.create(
-                    booking=cr.booking,
-                    request=cr,
-                    amount=Decimal(str(request.data['approved_refund_amount'])),
-                    status='PENDING',
-                )
-                refund_id = str(rf.id)
-            AuditLog.objects.create(
+        try:
+            cr, refund_id = decide_cancellation_request(
                 actor=request.user,
-                action='CANCELLATION_DECIDED',
-                resource_type='CancellationRequest',
-                resource_id=str(cr.id),
-                metadata={'decision': decision, 'refund_id': refund_id},
+                request_id=request_id,
+                decision=decision,
+                approved_refund_amount=request.data.get('approved_refund_amount'),
             )
+        except CancellationRequest.DoesNotExist:
+            return api_error('CancellationRequest not found.', 'NOT_FOUND', status.HTTP_404_NOT_FOUND, request)
+        except SettlementError as exc:
+            return api_error(str(exc), 'CANCELLATION_DECISION_ERROR', status.HTTP_422_UNPROCESSABLE_ENTITY, request)
         return Response({'id': str(cr.id), 'status': cr.status, 'refund_id': refund_id}, status=status.HTTP_201_CREATED)
 
 
 class AdminRefundsView(APIView):
-    permission_classes = [IsPlatformAdmin]
+    permission_classes = [IsPlatformStaffOrAdmin]
 
     def get(self, request):
         rows = list(

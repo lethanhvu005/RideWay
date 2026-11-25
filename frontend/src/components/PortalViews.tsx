@@ -37,9 +37,9 @@ export function MyTicketsPortal() {
 
   return (
     <div className="vx-container">
-      <div className="vx-section-header">
+      <div className="vx-section-header account-portal-heading">
         <div>
-          <div className="vx-section-kicker">KHÁCH HÀNG • MÀN HÌNH P-08</div>
+          <div className="vx-section-kicker">HÀNH TRÌNH CỦA BẠN</div>
           <h2 className="vx-section-title">Vé điện tử & Lịch sử đặt chỗ của tôi</h2>
         </div>
       </div>
@@ -56,14 +56,14 @@ export function MyTicketsPortal() {
         ) : (
           tickets.map((t) => (
             <div key={String(t.id)} className="vx-card" style={{ borderLeft: '5px solid var(--vx-primary)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div className="gw-card-row">
                 <span className="vx-badge vx-badge-green">VÉ ĐIỆN TỬ • {String(t.status)}</span>
                 <strong>{String(t.code)}</strong>
               </div>
               <div style={{ marginTop: 10, fontSize: 14 }}>
                 <div>Mã đơn: <strong>{String(t.booking_code)}</strong></div>
                 <div>Vị trí phòng/giường: <strong>{String(t.unit_code)}</strong></div>
-                <div style={{ fontSize: 12, color: 'var(--vx-muted)', marginTop: 4 }}>
+                <div style={{ fontSize: 12, color: 'var(--vx-muted)', marginTop: 4, wordBreak: 'break-all' }}>
                   Hash kiểm soát QR: <code>{String(t.qr_token_hash).slice(0, 18)}...</code>
                 </div>
               </div>
@@ -75,14 +75,14 @@ export function MyTicketsPortal() {
       <h3 style={{ color: 'var(--vx-primary-darker)' }}>Danh sách đơn đặt vé (`/api/v1/me/bookings`)</h3>
       <div style={{ display: 'grid', gap: 12 }}>
         {bookings.map((b) => (
-          <div key={String(b.id)} className="vx-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div key={String(b.id)} className="vx-card gw-card-row">
             <div>
               <div style={{ fontWeight: 800 }}>Mã đơn: {String(b.booking_code)}</div>
               <div style={{ fontSize: 13, color: 'var(--vx-muted)' }}>
                 Trạng thái: <strong>{String(b.status)}</strong> • Hết hạn giữ chỗ: {String(b.hold_expires_at)}
               </div>
             </div>
-            <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
               <strong className="vx-price-big">{Number(b.total_amount).toLocaleString('vi-VN')} đ</strong>
               <button type="button" className="vx-btn-outline" onClick={() => requestCancel(String(b.id))}>
                 Yêu cầu Hủy / Đổi
@@ -130,10 +130,10 @@ export function OperatorPortal() {
 
   return (
     <div className="vx-container">
-      <div className="vx-section-header">
+      <div className="vx-section-header account-portal-heading">
         <div>
-          <div className="vx-section-kicker">PORTAL HÃNG XE • WF-05 (O-01..O-04)</div>
-          <h2 className="vx-section-title">Quản lý Đội xe, Sơ đồ 2 tầng, Tuyến & Đặt chỗ (Cô lập theo operator_id)</h2>
+          <div className="vx-section-kicker">KHÔNG GIAN DÀNH CHO ĐỐI TÁC</div>
+          <h2 className="vx-section-title">Quản lý Đội xe, Sơ đồ 2 tầng, Tuyến & Đặt chỗ</h2>
         </div>
       </div>
 
@@ -174,11 +174,11 @@ export function OperatorPortal() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 20 }}>
+      <div className="gw-split-2">
         <div className="vx-card">
           <h3 style={{ marginTop: 0 }}>Danh sách phòng/giường đặt theo chặng (`/operators/me/booking-items`)</h3>
           {items.map((it) => (
-            <div key={String(it.id)} style={{ padding: '10px 0', borderBottom: '1px solid var(--vx-border-neutral)', display: 'flex', justifyContent: 'space-between' }}>
+            <div key={String(it.id)} className="gw-card-row" style={{ padding: '10px 0', borderBottom: '1px solid var(--vx-border-neutral)' }}>
               <span>
                 Đơn <strong>{String(it.booking__booking_code)}</strong> • Phòng <strong>{String(it.trip_unit__unit_code)}</strong> • Chặng [{String(it.from_sequence)}, {String(it.to_sequence)})
               </span>
@@ -199,7 +199,7 @@ export function OperatorPortal() {
             onChange={(e) => setQrInput(e.target.value)}
             style={{ marginBottom: 12 }}
           />
-          <button type="submit" className="vx-btn-primary">
+          <button type="submit" className="vx-btn-primary" style={{ width: '100%' }}>
             Xác nhận Check-in lên xe
           </button>
         </form>
@@ -234,10 +234,10 @@ export function AdminPortal() {
 
   return (
     <div className="vx-container">
-      <div className="vx-section-header">
+      <div className="vx-section-header account-portal-heading">
         <div>
-          <div className="vx-section-kicker">QUẢN TRỊ NỀN TẢNG • WF-06 (A-01..A-04 & S-01)</div>
-          <h2 className="vx-section-title">Bảng điều khiển Admin, Đối soát Đa hãng, Ngoại lệ & Audit Log</h2>
+          <div className="vx-section-kicker">TỔNG QUAN NỀN TẢNG</div>
+          <h2 className="vx-section-title">Quản lý hoạt động và đối soát</h2>
         </div>
       </div>
 
@@ -270,11 +270,11 @@ export function AdminPortal() {
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+      <div className="gw-split-2">
         <div className="vx-card">
           <h3 style={{ marginTop: 0 }}>Đối soát doanh thu hãng (`/admin/settlements` — Test T11)</h3>
           {settlements.map((s) => (
-            <div key={String(s.id)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid var(--vx-border-neutral)' }}>
+            <div key={String(s.id)} className="gw-card-row" style={{ padding: '10px 0', borderBottom: '1px solid var(--vx-border-neutral)' }}>
               <div>
                 <div style={{ fontWeight: 700 }}>Kỳ: {String(s.period_start)} → {String(s.period_end)}</div>
                 <div style={{ fontSize: 13, color: 'var(--vx-muted)' }}>
@@ -289,7 +289,7 @@ export function AdminPortal() {
 
           <h4 style={{ marginBottom: 8, marginTop: 20 }}>Danh sách hãng xe (`/admin/operators`)</h4>
           {operators.map((op) => (
-            <div key={String(op.id)} style={{ fontSize: 13, padding: '6px 0', display: 'flex', justifyContent: 'space-between' }}>
+            <div key={String(op.id)} className="gw-card-row" style={{ fontSize: 13, padding: '6px 0' }}>
               <span><strong>{String(op.name)}</strong> ({String(op.legal_name)})</span>
               <span className="vx-badge vx-badge-green">{String(op.status)}</span>
             </div>

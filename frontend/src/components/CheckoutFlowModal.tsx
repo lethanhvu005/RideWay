@@ -133,12 +133,12 @@ export function CheckoutFlowModal({ hold, onClose, onSuccessIssued }: Props) {
 
   return (
     <div className="vx-modal-backdrop">
-      <div className="vx-modal">
+      <div className="vx-modal checkout-dialog">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <div>
-            <div className="vx-section-kicker">QUY TRÌNH ĐẶT VÉ 5 BƯỚC (WF-04)</div>
+            <div className="vx-section-kicker">HOÀN TẤT HÀNH TRÌNH CỦA BẠN</div>
             <h2 style={{ margin: '4px 0 0', color: 'var(--vx-primary-darker)' }}>
-              Mã đơn giữ chỗ: {hold.booking_code}
+              Đặt vé {hold.booking_code}
             </h2>
           </div>
           <button type="button" className="vx-btn-outline" onClick={onClose}>
@@ -149,7 +149,7 @@ export function CheckoutFlowModal({ hold, onClose, onSuccessIssued }: Props) {
         <HoldTimer expiresAt={hold.hold_expires_at} />
 
         {/* Stepper Header */}
-        <div style={{ display: 'flex', gap: 8, margin: '16px 0', fontSize: 13, fontWeight: 700, flexWrap: 'wrap' }}>
+        <div className="checkout-steps" style={{ display: 'flex', gap: 8, margin: '16px 0', fontSize: 13, fontWeight: 700, flexWrap: 'wrap' }}>
           <span className="vx-badge vx-badge-green">① Chọn chuyến ✓</span>
           <span className="vx-badge vx-badge-green">② Giữ chỗ 10 phút ✓</span>
           <span className={`vx-badge ${step === 'PASSENGERS' ? 'vx-badge-amber' : 'vx-badge-green'}`}>
@@ -189,7 +189,7 @@ export function CheckoutFlowModal({ hold, onClose, onSuccessIssued }: Props) {
                 onChange={(e) => setPickupMode(e.target.value as 'NONE' | 'CUSTOM')}
               >
                 <option value="NONE">Đón tại bến / điểm dừng cố định trên tuyến (0 đ)</option>
-                <option value="CUSTOM">Nhập địa chỉ đón riêng (Cần hãng báo giá trước khi thanh toán — API-12)</option>
+                <option value="CUSTOM">Đón tại địa chỉ riêng (hãng xe sẽ báo phụ phí)</option>
               </select>
             </div>
 
@@ -208,7 +208,7 @@ export function CheckoutFlowModal({ hold, onClose, onSuccessIssued }: Props) {
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
               <div>
-                Tổng tiền Backend báo giá:{' '}
+                Tổng thanh toán:{' '}
                 <strong className="vx-price-big">{Number(finalTotal).toLocaleString('vi-VN')} đ</strong>
               </div>
               <button type="submit" className="vx-btn-primary" disabled={busy}>
@@ -248,7 +248,7 @@ export function CheckoutFlowModal({ hold, onClose, onSuccessIssued }: Props) {
             </div>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
               <button type="button" className="vx-btn-primary" onClick={handleCheckPaymentStatus} disabled={busy}>
-                {busy ? 'Đang đối chiếu...' : 'Đối chiếu trạng thái thanh toán từ Backend'}
+                {busy ? 'Đang đối chiếu...' : 'Kiểm tra thanh toán'}
               </button>
             </div>
           </div>
@@ -260,7 +260,7 @@ export function CheckoutFlowModal({ hold, onClose, onSuccessIssued }: Props) {
               ✓ Vé điện tử đã được phát hành!
             </h3>
             <p style={{ margin: 0, fontSize: 14 }}>
-              Bạn có thể tra cứu mã vé QR trong mục <strong>Vé của tôi (P-08)</strong>.
+              Bạn có thể tra cứu mã vé QR trong mục <strong>Vé của tôi</strong>.
             </p>
           </div>
         )}

@@ -64,7 +64,7 @@ export function MyTicketsPortal() {
                 <div>Mã đơn: <strong>{String(t.booking_code)}</strong></div>
                 <div>Vị trí phòng/giường: <strong>{String(t.unit_code)}</strong></div>
                 <div style={{ fontSize: 12, color: 'var(--vx-muted)', marginTop: 4, wordBreak: 'break-all' }}>
-                  Hash kiểm soát QR: <code>{String(t.qr_token_hash).slice(0, 18)}...</code>
+                  Mã Token QR: <code>{String(t.qr_token ?? '')}</code>
                 </div>
               </div>
             </div>

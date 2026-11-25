@@ -3,7 +3,9 @@ import { apiFetch } from './api/client';
 import { CheckoutFlowModal, type ActiveHoldBooking } from './components/CheckoutFlowModal';
 import { AdminPortal, MyTicketsPortal, OperatorPortal } from './components/PortalViews';
 import { SeatLayout2Deck, type SelectedUnitConfig, type TripUnitItem } from './components/SeatLayout2Deck';
+import { AuthDialog } from './components/AuthDialog';
 import './styles/theme.css';
+import './styles/account.css';
 import './styles/motion.css';
 
 interface LocationItem {
@@ -89,14 +91,14 @@ const ADVENTURE_TABS = [
     icon: '🗺️',
     label: 'Bán vé theo chặng',
     title: 'Linh hoạt đặt vé theo từng đoạn chặng [Điểm đi → Điểm đến)',
-    desc: 'Công nghệ PostgreSQL int4range cho phép cùng một phòng bán chặng A→B và B→C liên tiếp mà tuyệt đối không bao giờ bán trùng chặng giao nhau.',
+    desc: 'Chọn đúng điểm đi và điểm đến, chỉ thanh toán cho đoạn đường bạn sử dụng.',
   },
   {
     id: 'hold',
     icon: '⏱️',
     label: 'Giữ chỗ 10 phút',
     title: 'Giữ nhiều phòng nguyên tử All-or-Nothing trong 10 phút',
-    desc: 'Chọn nhiều phòng trong một đơn hàng duy nhất; thời hạn giữ chỗ 10 phút do Backend cấp và tự động thu hồi an toàn khi quá hạn.',
+    desc: 'Chọn nhiều phòng trong cùng một đơn và giữ chỗ trong 10 phút để hoàn tất thanh toán.',
   },
   {
     id: 'vnpay',
@@ -116,14 +118,12 @@ const ADVENTURE_TABS = [
 
 export function App() {
   const [activePortal, setActivePortal] = useState<'PUBLIC' | 'MY_TICKETS' | 'OPERATOR' | 'ADMIN'>('PUBLIC');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [slideIdx, setSlideIdx] = useState(0);
   const [advTab, setAdvTab] = useState(ADVENTURE_TABS[0]);
 
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [authEmail, setAuthEmail] = useState('khach1@vexuyenviet.vn');
-  const [authPassword, setAuthPassword] = useState('Khach@123456');
-  const [authError, setAuthError] = useState<string | null>(null);
 
   const [locations, setLocations] = useState<LocationItem[]>([]);
   const [trips, setTrips] = useState<TripSummary[]>([]);
@@ -197,20 +197,6 @@ export function App() {
     apiFetch<{ results: DestinationItem[] }>('/destinations').then((r) => setDestinations(r.results)).catch(() => {});
     apiFetch<{ results: PostSummary[] }>('/posts').then((r) => setPosts(r.results)).catch(() => {});
   }, []);
-
-  const handleLogin = async (emailInput: string, passwordInput: string) => {
-    setAuthError(null);
-    try {
-      await apiFetch('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ email: emailInput, password: passwordInput }),
-      });
-      refreshProfile();
-      setShowAuthModal(false);
-    } catch (err) {
-      setAuthError(err instanceof Error ? err.message : 'Đăng nhập thất bại');
-    }
-  };
 
   const handleLogout = async () => {
     await apiFetch('/auth/logout', { method: 'POST' }).catch(() => {});
@@ -360,7 +346,7 @@ export function App() {
               className={`gw-portal-pill ${activePortal === 'MY_TICKETS' ? 'active' : ''}`}
               onClick={() => (currentUser ? setActivePortal('MY_TICKETS') : setShowAuthModal(true))}
             >
-              Vé của tôi (P-08)
+              Vé của tôi
             </button>
             <button
               type="button"
@@ -410,15 +396,37 @@ export function App() {
                 </button>
               </>
             ) : (
-              <div
+              <button
+                type="button"
+                aria-label="Đăng nhập tài khoản"
                 className="gw-user-circle"
                 title="Login / Đăng ký"
                 onClick={() => setShowAuthModal(true)}
               >
                 👤
-              </div>
+              </button>
             )}
+            <button
+              type="button"
+              className="gw-hamburger-btn"
+              aria-label="Mở menu điều hướng"
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation"
+              onClick={() => setMobileMenuOpen((v) => !v)}
+            >
+              {mobileMenuOpen ? '✕' : '☰'}
+            </button>
           </div>
+        </div>
+
+        {/* Mobile & Tablet Slide-down Drawer Menu */}
+        <div id="mobile-navigation" className={`gw-mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
+          <a href="#top" onClick={() => { setActivePortal('PUBLIC'); setMobileMenuOpen(false); }}>🏠 Trang chủ</a>
+          <a href="#about" onClick={() => { setActivePortal('PUBLIC'); setMobileMenuOpen(false); }}>✨ Giới thiệu</a>
+          <a href="#tours" onClick={() => { setActivePortal('PUBLIC'); setMobileMenuOpen(false); }}>🚍 Chuyến xe / Tours</a>
+          <a href="#booking-map" onClick={() => { setActivePortal('PUBLIC'); setMobileMenuOpen(false); }}>🛏️ Sơ đồ phòng 2 tầng</a>
+          <a href="#destinations" onClick={() => { setActivePortal('PUBLIC'); setMobileMenuOpen(false); }}>📍 Các điểm đến</a>
+          <a href="#news" onClick={() => { setActivePortal('PUBLIC'); setMobileMenuOpen(false); }}>📰 Tin tức & Cẩm nang</a>
         </div>
       </header>
 
@@ -621,7 +629,7 @@ export function App() {
                     <div>
                       <div style={{ fontWeight: 800 }}>An toàn là ưu tiên</div>
                       <div style={{ fontSize: 13, color: 'var(--gw-muted)' }}>
-                        Chống bán trùng chặng tuyệt đối bằng PostgreSQL GiST Exclusion.
+                        Kiểm tra chỗ trống theo từng chặng của hành trình.
                       </div>
                     </div>
                   </div>
@@ -842,16 +850,16 @@ export function App() {
               <div className="vx-card" style={{ background: 'var(--gw-bg-soft)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12, marginBottom: 12 }}>
                   <div>
-                    <span className="gw-sub-pill">Đặt chỗ trực tiếp từ Docker PostgreSQL (WF-03)</span>
+                    <span className="gw-sub-pill">CHỌN CHỖ CHO HÀNH TRÌNH</span>
                     <h3 style={{ margin: '4px 0 0', fontSize: 22 }}>
                       Chọn chuyến & Sơ đồ phòng / giường 2 tầng
                     </h3>
                   </div>
 
-                  <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', flex: '1 1 320px' }}>
                     <select
                       className="vx-select"
-                      style={{ width: 270 }}
+                      style={{ flex: '1 1 220px' }}
                       value={selectedTripId ?? ''}
                       onChange={(e) =>
                         void fetchTripUnits(
@@ -878,7 +886,7 @@ export function App() {
 
                     <select
                       className="vx-select"
-                      style={{ width: 260 }}
+                      style={{ flex: '1 1 220px' }}
                       value={segmentIdx}
                       onChange={(e) => {
                         const idx = Number(e.target.value);
@@ -901,7 +909,7 @@ export function App() {
                   </div>
                 </div>
 
-                {loading && <div>Đang kết nối PostgreSQL...</div>}
+                {loading && <div>Đang tải những chuyến xe phù hợp…</div>}
                 {error && <div style={{ color: 'var(--gw-danger)', fontWeight: 700 }}>Lỗi API: {error}</div>}
                 {holdError && (
                   <div style={{ padding: 12, background: '#fef2f2', color: 'var(--gw-danger)', borderRadius: 10, marginBottom: 12, fontWeight: 700 }}>
@@ -1142,78 +1150,7 @@ export function App() {
         </div>
       </footer>
 
-      {/* Auth Modal (P-04) */}
-      {showAuthModal && (
-        <div className="vx-modal-backdrop">
-          <div className="vx-modal" style={{ maxWidth: 480 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-              <h3 style={{ margin: 0 }}>Login / Đăng nhập tài khoản (P-04)</h3>
-              <button type="button" className="vx-btn-outline" onClick={() => setShowAuthModal(false)}>
-                ✕
-              </button>
-            </div>
-
-            <div style={{ marginBottom: 14 }}>
-              <div className="vx-field-label">Chọn nhanh tài khoản mẫu trong Docker DB:</div>
-              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                <button
-                  type="button"
-                  className="vx-btn-outline"
-                  onClick={() => void handleLogin('khach1@vexuyenviet.vn', 'Khach@123456')}
-                >
-                  👤 Khách hàng 1
-                </button>
-                <button
-                  type="button"
-                  className="vx-btn-outline"
-                  onClick={() => void handleLogin('owner.phuongtrang@vexuyenviet.vn', 'Owner@123456')}
-                >
-                  🚍 Chủ hãng Phương Trang
-                </button>
-                <button
-                  type="button"
-                  className="vx-btn-outline"
-                  onClick={() => void handleLogin('admin@vexuyenviet.vn', 'Admin@123456')}
-                >
-                  🛡️ Platform Admin
-                </button>
-              </div>
-            </div>
-
-            {authError && (
-              <div style={{ padding: 10, background: '#fef2f2', color: 'var(--gw-danger)', borderRadius: 8, marginBottom: 12, fontSize: 13 }}>
-                {authError}
-              </div>
-            )}
-
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                void handleLogin(authEmail, authPassword);
-              }}
-              style={{ display: 'grid', gap: 12 }}
-            >
-              <div>
-                <label className="vx-field-label">Email</label>
-                <input className="vx-input" value={authEmail} onChange={(e) => setAuthEmail(e.target.value)} required />
-              </div>
-              <div>
-                <label className="vx-field-label">Mật khẩu</label>
-                <input
-                  className="vx-input"
-                  type="password"
-                  value={authPassword}
-                  onChange={(e) => setAuthPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <button type="submit" className="gw-btn-green" style={{ justifyContent: 'center' }}>
-                Đăng nhập ➜
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
+      {showAuthModal && <AuthDialog onClose={() => setShowAuthModal(false)} onSuccess={() => { refreshProfile(); setShowAuthModal(false); }} />}
 
       {/* 5-Step Checkout & VNPay QR Modal (WF-04) */}
       {activeHold && (

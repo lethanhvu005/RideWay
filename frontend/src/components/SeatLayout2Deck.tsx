@@ -71,16 +71,16 @@ export function SeatLayout2Deck({
           </div>
           <div style={{ display: 'flex', gap: 12, fontSize: 12, fontWeight: 600, flexWrap: 'wrap' }}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-              <span style={{ width: 12, height: 12, borderRadius: 3, background: '#fff', border: '1px solid #63ab45' }} />
+              <span style={{ width: 12, height: 12, borderRadius: 3, background: '#fff', border: '1px solid #2474e5' }} />
               ✓ Còn trống
             </span>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-              <span style={{ width: 12, height: 12, borderRadius: 3, background: '#ebf5e6', border: '2px solid #4e8c33' }} />
+              <span style={{ width: 12, height: 12, borderRadius: 3, background: '#e8f2ff', border: '2px solid #1858b8' }} />
               ● Đang chọn
             </span>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
               <span style={{ width: 12, height: 12, borderRadius: 3, background: '#e2e8f0', border: '1px solid #94a3b8' }} />
-              🔒 Đã khóa
+              🔒 Đã bán / Khóa
             </span>
           </div>
         </div>
@@ -157,8 +157,8 @@ export function SeatLayout2Deck({
                             ? '2px solid var(--vx-primary-dark)'
                             : !u.available
                             ? '1px dashed #cbd5e1'
-                            : '1px solid #9fd487',
-                          background: !u.available ? '#f1f5f9' : isSelected ? '#ebf5e6' : '#ffffff',
+                            : '1px solid #7cb3f5',
+                          background: !u.available ? '#f1f5f9' : isSelected ? '#e8f2ff' : '#ffffff',
                           color: !u.available ? '#94a3b8' : 'var(--vx-text)',
                           cursor: u.available ? 'pointer' : 'not-allowed',
                           textAlign: 'left',

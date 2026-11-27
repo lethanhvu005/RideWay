@@ -178,11 +178,32 @@ const ADVENTURE_TABS = [
   },
 ];
 
+const MONA_DISCOVER_CARDS = [
+  { title: 'Khám phá quần đảo', label: 'PHIÊU LƯU', image: '/images/terraces-banner.jpg' },
+  { title: 'Khám phá hang động', label: 'PHIÊU LƯU', image: '/images/adventure-hero.jpg' },
+  { title: 'Khám phá ngọn núi', label: 'PHIÊU LƯU', image: '/images/mountain-hero.jpg' },
+  { title: 'Khám phá thung lũng', label: 'PHIÊU LƯU', image: '/images/city-route.jpg' },
+  { title: 'Khám phá cung đường biển', label: 'HÀNH TRÌNH', image: 'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=800&q=80' },
+  { title: 'Khám phá cố đô di sản', label: 'VĂN HÓA', image: 'https://images.unsplash.com/photo-1583417319070-4a69db38a482?auto=format&fit=crop&w=800&q=80' },
+  { title: 'Khám phá cao nguyên đá', label: 'PHIÊU LƯU', image: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80' },
+  { title: 'Khám phá thế giới', label: 'TRẢI NGHIỆM', image: '/images/terraces-banner.jpg' },
+];
+
+const MONA_STATS = [
+  { value: '3500+', label: 'Khách hàng thân thiết', icon: '♧' },
+  { value: '1650+', label: 'Chuyến xe đã mở bán', icon: '⌁' },
+  { value: '99.5%', label: 'Đánh giá tích cực', icon: '★' },
+  { value: '62+', label: 'Tuyến đường kết nối', icon: '⚑' },
+];
+
 export function App() {
   const [activePortal, setActivePortal] = useState<'PUBLIC' | 'MY_TICKETS' | 'OPERATOR' | 'ADMIN'>('PUBLIC');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [slideIdx, setSlideIdx] = useState(0);
+  const [discoverIdx, setDiscoverIdx] = useState(0);
+  const [discoverAnimating, setDiscoverAnimating] = useState(true);
+  const [discoverPaused, setDiscoverPaused] = useState(false);
   const [advTab, setAdvTab] = useState(ADVENTURE_TABS[0]);
 
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
@@ -406,6 +427,33 @@ export function App() {
     }, 4000);
     return () => window.clearInterval(timer);
   }, [activePortal]);
+
+  /* Smooth automatic Discover carousel ("Khám phá những điều tuyệt vời") rotation every 2.8 seconds */
+  useEffect(() => {
+    if (activePortal !== 'PUBLIC' || discoverPaused) return;
+    const timer = window.setInterval(() => {
+      setDiscoverAnimating(true);
+      setDiscoverIdx((prev) => (prev >= MONA_DISCOVER_CARDS.length ? 1 : prev + 1));
+    }, 2800);
+    return () => window.clearInterval(timer);
+  }, [activePortal, discoverPaused]);
+
+  /* Seamless loop reset when reaching cloned cards at index MONA_DISCOVER_CARDS.length */
+  useEffect(() => {
+    if (discoverIdx !== MONA_DISCOVER_CARDS.length) return;
+    let frameTimer: number | undefined;
+    const snapTimer = window.setTimeout(() => {
+      setDiscoverAnimating(false);
+      setDiscoverIdx(0);
+      frameTimer = window.setTimeout(() => {
+        setDiscoverAnimating(true);
+      }, 45);
+    }, 730);
+    return () => {
+      window.clearTimeout(snapTimer);
+      if (frameTimer) window.clearTimeout(frameTimer);
+    };
+  }, [discoverIdx]);
 
   /* Filter trips client-side according to Vexere Sidebar selections */
   const uniqueOperators = Array.from(
@@ -1441,6 +1489,86 @@ export function App() {
               ))}
             </div>
           </section>
+
+          <section
+            className="mona-discover-section"
+            aria-labelledby="discover-title"
+            onMouseEnter={() => setDiscoverPaused(true)}
+            onMouseLeave={() => setDiscoverPaused(false)}
+          >
+            <div className="mona-discover-heading">
+              <div>
+                <span className="gw-sub-pill">Trải nghiệm theo cách riêng</span>
+                <h2 id="discover-title">Khám phá những điều tuyệt vời</h2>
+              </div>
+              <div className="mona-carousel-controls" aria-label="Điều khiển điểm đến">
+                <button
+                  type="button"
+                  aria-label="Cuộn sang trái"
+                  onClick={() => {
+                    setDiscoverAnimating(true);
+                    setDiscoverIdx((prev) => (prev <= 0 ? MONA_DISCOVER_CARDS.length - 1 : prev - 1));
+                  }}
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  aria-label="Cuộn sang phải"
+                  onClick={() => {
+                    setDiscoverAnimating(true);
+                    setDiscoverIdx((prev) => (prev >= MONA_DISCOVER_CARDS.length ? 1 : prev + 1));
+                  }}
+                >
+                  ›
+                </button>
+              </div>
+            </div>
+            <div className="mona-discover-viewport">
+              <div
+                className={`mona-discover-track${discoverAnimating ? '' : ' no-transition'}`}
+                id="mona-discover-track"
+                style={{ '--discover-index': discoverIdx } as React.CSSProperties}
+              >
+                {[...MONA_DISCOVER_CARDS, ...MONA_DISCOVER_CARDS.slice(0, 4)].map((card, i) => (
+                  <article
+                    className="mona-discover-card"
+                    key={`${card.title}-${i}`}
+                    style={{ backgroundImage: `url(${card.image})` }}
+                    onClick={() => document.getElementById('booking-map')?.scrollIntoView({ behavior: 'smooth' })}
+                  >
+                    <div className="mona-discover-overlay" />
+                    <div className="mona-discover-content">
+                      <span className="mona-plus">+</span>
+                      <h3>{card.title}</h3>
+                      <small>{card.label}</small>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+            <div className="mona-discover-dots" role="tablist" aria-label="Chỉ mục slide khám phá">
+              {MONA_DISCOVER_CARDS.map((card, i) => {
+                const activeDot = discoverIdx % MONA_DISCOVER_CARDS.length === i;
+                return (
+                  <button
+                    key={card.title}
+                    type="button"
+                    aria-label={`Chuyển tới ${card.title}`}
+                    className={`mona-discover-dot${activeDot ? ' active' : ''}`}
+                    onClick={() => {
+                      setDiscoverAnimating(true);
+                      setDiscoverIdx(i);
+                    }}
+                  />
+                );
+              })}
+            </div>
+          </section>
+
+          <section className="mona-stats-section" aria-labelledby="stats-title"><div className="mona-centered-heading"><span className="gw-sub-pill">Chuyến đi thú vị</span><h2 id="stats-title">Thành tựu đạt được</h2></div><div className="mona-stats-grid">{MONA_STATS.map((stat) => <article className="mona-stat-card" key={stat.label}><span className="mona-stat-icon">{stat.icon}</span><strong>{stat.value}</strong><span>{stat.label}</span></article>)}</div></section>
+
+          <section className="mona-testimonial-section" aria-labelledby="testimonial-title"><div className="mona-testimonial-copy"><span className="gw-sub-pill">Chất lượng dịch vụ</span><h2 id="testimonial-title">Đánh giá tích cực từ khách hàng</h2><p>Những trải nghiệm thật từ hành khách giúp chúng tôi tiếp tục hoàn thiện từng chuyến xe và từng khoảnh khắc trên hành trình.</p></div><article className="mona-testimonial-card"><div className="mona-stars">★★★★★</div><blockquote>“Tôi đã có một chuyến đi thật thoải mái. Đặt vé nhanh, chọn phòng dễ dàng và đội ngũ hỗ trợ rất tận tâm.”</blockquote><div className="mona-reviewer"><span className="mona-reviewer-avatar">L</span><div><strong>Lan Anh</strong><small>Hành khách thân thiết</small></div></div></article></section>
 
           {/* 11. PRE-FOOTER CTA BAR */}
           <div className="gw-cta-bar">

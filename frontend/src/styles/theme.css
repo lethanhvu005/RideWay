@@ -1103,6 +1103,38 @@ img {
   }
 }
 
+/* Mona Tour inspired discovery, achievements and review sections. */
+.mona-discover-section { background: #19211e; color: #fff; padding: 62px max(24px, calc((100% - 1290px) / 2)); overflow: hidden; }
+.mona-discover-heading { display:flex; align-items:end; justify-content:space-between; gap:24px; margin-bottom:26px; }
+.mona-discover-heading h2,.mona-centered-heading h2,.mona-testimonial-copy h2 { margin:10px 0 0; font-size:clamp(27px,3vw,42px); line-height:1.2; color:inherit; }
+.mona-carousel-controls { display:flex; gap:10px; }
+.mona-carousel-controls button { width:44px; height:44px; border:0; border-radius:7px; background:#fff; color:#19211e; font-size:30px; line-height:1; cursor:pointer; transition:background 0.2s, color 0.2s, transform 0.2s; }
+.mona-carousel-controls button:hover { background:var(--gw-orange); color:#0d2e59; transform:translateY(-1px); }
+.mona-discover-viewport { width:100%; overflow:hidden; padding:4px 0 14px; }
+.mona-discover-track { --discover-cols:4; --discover-gap:24px; display:flex; gap:var(--discover-gap); width:100%; transform:translate3d(calc(-1 * var(--discover-index, 0) * ((100% + var(--discover-gap)) / var(--discover-cols))), 0, 0); transition:transform 0.72s cubic-bezier(0.22, 1, 0.36, 1); will-change:transform; }
+.mona-discover-track.no-transition { transition:none !important; }
+.mona-discover-card { position:relative; flex:0 0 calc((100% - (var(--discover-cols) - 1) * var(--discover-gap)) / var(--discover-cols)); height:320px; border-radius:12px; overflow:hidden; background-size:cover; background-position:center; cursor:pointer; }
+.mona-discover-dots { display:flex; justify-content:center; align-items:center; gap:8px; margin-top:14px; }
+.mona-discover-dot { width:9px; height:9px; border-radius:999px; border:none; background:rgba(255,255,255,0.28); padding:0; cursor:pointer; transition:all 0.35s ease; }
+.mona-discover-dot.active { width:26px; background:#ff921e; }
+.mona-discover-overlay { position:absolute; inset:0; background:linear-gradient(180deg,transparent 30%,rgba(10,20,16,.88)); transition:background .25s; }
+.mona-discover-card:hover .mona-discover-overlay { background:linear-gradient(180deg,rgba(25,160,72,.12),rgba(10,20,16,.92)); }
+.mona-discover-content { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:end; text-align:center; padding:24px; }
+.mona-plus { width:46px; height:46px; display:grid; place-items:center; border-radius:50%; background:#ff921e; color:#fff; font-size:31px; line-height:1; margin-bottom:24px; box-shadow:0 8px 18px #ff921e55; }
+.mona-discover-content h3 { margin:0 0 6px; font-size:18px; color:#fff; }.mona-discover-content small { color:#fff; letter-spacing:.2em; font-size:10px; font-weight:800; }
+.mona-stats-section { padding:72px max(24px, calc((100% - 1290px) / 2)); background:#fff; }
+.mona-centered-heading { text-align:center; color:var(--gw-dark); margin-bottom:34px; }.mona-centered-heading .gw-sub-pill { display:inline-block; }.mona-stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:22px; }
+.mona-stat-card { min-height:220px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; border-radius:10px; background:#fff; box-shadow:0 8px 28px rgba(20,40,25,.08); text-align:center; }
+.mona-stat-icon { width:96px; height:96px; display:grid; place-items:center; border-radius:50%; background:#eff7ea; color:var(--gw-green); font-size:40px; }.mona-stat-card:nth-child(3) .mona-stat-icon { background:var(--gw-green); color:#fff; }
+.mona-stat-card strong { font-size:32px; line-height:1.1; color:var(--gw-dark); }.mona-stat-card > span:last-child { color:#89908b; font-size:13px; font-weight:600; }
+.mona-testimonial-section { display:grid; grid-template-columns:1fr 1.1fr; gap:68px; align-items:center; padding:76px max(24px, calc((100% - 1200px) / 2)); background:#f5faf4; background-image:radial-gradient(#dcebd8 1px,transparent 1px); background-size:22px 22px; }
+.mona-testimonial-copy { color:var(--gw-dark); }.mona-testimonial-copy p { color:var(--gw-muted); line-height:1.8; max-width:470px; margin-top:20px; }
+.mona-testimonial-card { background:#fff; border-radius:12px; border-bottom:3px solid var(--gw-green); padding:38px 42px 30px; box-shadow:0 12px 32px rgba(20,40,25,.1); position:relative; }.mona-testimonial-card:before { content:'“'; position:absolute; top:0; right:22px; color:var(--gw-green); font:90px Georgia; line-height:1; }
+.mona-stars { color:#5aa943; letter-spacing:.25em; font-size:19px; }.mona-testimonial-card blockquote { margin:20px 0 28px; color:var(--gw-dark); font:italic 16px/1.9 Georgia,serif; }.mona-reviewer { display:flex; align-items:center; gap:12px; }.mona-reviewer-avatar { width:52px; height:52px; display:grid; place-items:center; border-radius:50%; border:3px solid var(--gw-green); background:#e8f5e2; color:var(--gw-green-dark); font-weight:900; font-size:22px; }.mona-reviewer strong,.mona-reviewer small { display:block; }.mona-reviewer small { color:var(--gw-muted); font-size:12px; margin-top:3px; }
+@media (max-width:1024px) { .mona-discover-track { --discover-cols:2; --discover-gap:18px; } }
+@media (max-width:900px) { .mona-stats-grid { grid-template-columns:repeat(2,1fr); }.mona-testimonial-section { grid-template-columns:1fr; gap:28px; } }
+@media (max-width:560px) { .mona-discover-section,.mona-stats-section,.mona-testimonial-section { padding-left:16px; padding-right:16px; }.mona-discover-heading { align-items:start; flex-direction:column; }.mona-discover-track { --discover-cols:1; --discover-gap:16px; }.mona-discover-card { height:300px; }.mona-stats-grid { gap:12px; }.mona-stat-card { min-height:175px; }.mona-stat-icon { width:68px; height:68px; font-size:28px; }.mona-stat-card strong { font-size:25px; }.mona-testimonial-card { padding:28px 22px 24px; } }
+
 /* ==========================================================================
    VEXERE.COM INSPIRED OCEAN-BLUE UI COMPONENTS
    ========================================================================== */

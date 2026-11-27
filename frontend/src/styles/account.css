@@ -35,11 +35,11 @@
 .vx-modal form > div:last-child { flex-wrap: wrap; gap: 16px; }
 .vx-modal button { min-height: 44px; }
 .vx-input, .vx-select { background: #f8fbff; border-color: #c5dcf8; min-height: 46px; font-size: 16px; min-width: 0; max-width: 100%; }
-.vx-card { min-width: 0; overflow-wrap: anywhere; }
+.vx-card { min-width: 0; }
 .gw-search-field > div, .vx-footer-inner > div { min-width: 0; }
-.gw-field-control { max-width: 100%; min-width: 0; font-size: 16px; }
-.gw-user-circle { flex-shrink: 0; min-width: 44px; min-height: 44px; }
-.gw-header-actions .vx-badge { max-width: 180px; overflow-wrap: anywhere; }
+.gw-field-control { max-width: 100%; min-width: 0; font-size: 15px; }
+.gw-user-circle { flex-shrink: 0; min-width: 40px; min-height: 40px; }
+.gw-header-actions .vx-badge { max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .vx-footer code { overflow-wrap: anywhere; }
 @media (max-width: 991px) { .account-scenery { padding: 28px; } .account-content { padding: 50px 28px 28px; } }
 @media (max-width: 640px) {

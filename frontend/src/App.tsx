@@ -67,8 +67,8 @@ const HERO_SLIDES = [
   {
     sub: 'Cam kết hoàn 150% nếu nhà xe không giữ chỗ • Vé Xuyên Việt',
     title: 'Đặt vé xe khách & Limousine 2 tầng Xuyên Việt trực tuyến',
-    desc: 'Chọn chính xác vị trí phòng đôi VIP (2NL + 1TE) hoặc giường nằm theo từng đoạn chặng. Giữ chỗ nguyên tử 10 phút, thanh toán VNPay QR 100% xuất vé điện tử tức thì.',
-    bg: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1800&q=80',
+    desc: 'Chọn chính xác vị trí phòng đôi VIP (2NL + 1TE) hoặc giường nằm theo từng đoạn chặng. Giữ chỗ 10 phút, thanh toán VNPay QR 100%.',
+    bg: '/images/terraces-banner.jpg',
   },
   {
     sub: '50+ Nhà xe Limousine & Giường nằm 2 tầng uy tín',
@@ -169,6 +169,7 @@ const ADVENTURE_TABS = [
 export function App() {
   const [activePortal, setActivePortal] = useState<'PUBLIC' | 'MY_TICKETS' | 'OPERATOR' | 'ADMIN'>('PUBLIC');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [slideIdx, setSlideIdx] = useState(0);
   const [advTab, setAdvTab] = useState(ADVENTURE_TABS[0]);
 
@@ -413,7 +414,7 @@ export function App() {
 
   return (
     <div>
-      {/* 1. VEXERE DEEP OCEAN NAVY TOPBAR (#0D2E59) */}
+      {/* 1. SLIM 1-LINE VEXERE UTILITY TOPBAR (#0D2E59) */}
       <div className="gw-topbar">
         <div className="gw-topbar-inner">
           <div className="gw-topbar-left">
@@ -421,50 +422,38 @@ export function App() {
               <i>🛡️</i> Cam kết hoàn 150% nếu nhà xe không giữ chỗ
             </span>
             <span>
+              <i>⚡</i> Giữ chỗ 10 phút • Xuất vé QR tức thì
+            </span>
+          </div>
+
+          <div className="gw-topbar-right">
+            <span>
               <i>📞</i> Hotline 24/7: <strong>1900 6886</strong>
             </span>
             <span>
               <i>✉️</i> hotro@vexuyenviet.vn
             </span>
-          </div>
-
-          <div className="gw-topbar-right">
-            <a href="#booking-map" className="gw-book-now-top" onClick={() => setActivePortal('PUBLIC')}>
-              ĐẶT VÉ NGAY
-            </a>
             <button
               type="button"
-              className={`gw-portal-pill ${activePortal === 'PUBLIC' ? 'active' : ''}`}
-              onClick={() => setActivePortal('PUBLIC')}
+              onClick={() => setSlideIdx((slideIdx + 1) % HERO_SLIDES.length)}
+              style={{
+                background: 'rgba(255,255,255,0.12)',
+                color: '#ffc700',
+                border: '1px solid rgba(255,199,0,0.35)',
+                borderRadius: 6,
+                padding: '2px 9px',
+                fontSize: 11.5,
+                fontWeight: 700,
+                cursor: 'pointer',
+              }}
             >
-              Trang chủ
-            </button>
-            <button
-              type="button"
-              className={`gw-portal-pill ${activePortal === 'MY_TICKETS' ? 'active' : ''}`}
-              onClick={() => (currentUser ? setActivePortal('MY_TICKETS') : setShowAuthModal(true))}
-            >
-              Đơn hàng của tôi
-            </button>
-            <button
-              type="button"
-              className={`gw-portal-pill ${activePortal === 'OPERATOR' ? 'active' : ''}`}
-              onClick={() => (currentUser ? setActivePortal('OPERATOR') : setShowAuthModal(true))}
-            >
-              Mở bán trên VéXuyênViệt
-            </button>
-            <button
-              type="button"
-              className={`gw-portal-pill ${activePortal === 'ADMIN' ? 'active' : ''}`}
-              onClick={() => (currentUser ? setActivePortal('ADMIN') : setShowAuthModal(true))}
-            >
-              Quản trị sàn
+              Đổi ảnh nền ⟳
             </button>
           </div>
         </div>
       </div>
 
-      {/* 2. VEXERE OCEAN-BLUE & WHITE STICKY HEADER */}
+      {/* 2. UNIFIED VEXERE WHITE STICKY HEADER (No vertical text crushing!) */}
       <header className="gw-header">
         <div className="gw-header-inner">
           <div className="gw-logo" onClick={() => setActivePortal('PUBLIC')}>
@@ -474,22 +463,58 @@ export function App() {
             </div>
           </div>
 
-          <nav className="gw-nav">
-            <a href="#top" onClick={() => setActivePortal('PUBLIC')}>Xe khách & Limousine</a>
-            <a href="#popular-routes" onClick={() => setActivePortal('PUBLIC')}>Tuyến phổ biến</a>
-            <a href="#booking-map" onClick={() => setActivePortal('PUBLIC')}>Lịch trình & Sơ đồ 2 tầng</a>
-            <a href="#about" onClick={() => setActivePortal('PUBLIC')}>Ưu điểm nền tảng</a>
-            <a href="#destinations" onClick={() => setActivePortal('PUBLIC')}>Bến xe & Điểm đến</a>
-            <a href="#news" onClick={() => setActivePortal('PUBLIC')}>Cẩm nang di chuyển</a>
+          <nav className="gw-nav" aria-label="Điều hướng chính">
+            <button
+              type="button"
+              className={`gw-nav-item ${activePortal === 'PUBLIC' ? 'active' : ''}`}
+              onClick={() => setActivePortal('PUBLIC')}
+            >
+              🏠 Trang chủ
+            </button>
+            <a
+              href="#popular-routes"
+              className="gw-nav-item"
+              onClick={() => setActivePortal('PUBLIC')}
+            >
+              🔥 Tuyến phổ biến
+            </a>
+            <a
+              href="#booking-map"
+              className="gw-nav-item"
+              onClick={() => setActivePortal('PUBLIC')}
+            >
+              🛏️ Tìm chuyến & Sơ đồ 2 tầng
+            </a>
+            <button
+              type="button"
+              className={`gw-nav-item ${activePortal === 'MY_TICKETS' ? 'active' : ''}`}
+              onClick={() => (currentUser ? setActivePortal('MY_TICKETS') : setShowAuthModal(true))}
+            >
+              🎟️ Đơn hàng của tôi
+            </button>
+            <button
+              type="button"
+              className={`gw-nav-item ${activePortal === 'OPERATOR' ? 'active' : ''}`}
+              onClick={() => (currentUser ? setActivePortal('OPERATOR') : setShowAuthModal(true))}
+            >
+              🏢 Mở bán vé (Hãng xe)
+            </button>
+            <button
+              type="button"
+              className={`gw-nav-item ${activePortal === 'ADMIN' ? 'active' : ''}`}
+              onClick={() => (currentUser ? setActivePortal('ADMIN') : setShowAuthModal(true))}
+            >
+              ⚙️ Quản trị sàn
+            </button>
           </nav>
 
           <div className="gw-header-actions">
             {currentUser ? (
               <>
-                <span className="vx-badge vx-badge-green">
+                <span className="gw-user-pill" title={currentUser.full_name || currentUser.email}>
                   👤 {currentUser.full_name || currentUser.email}
                 </span>
-                <button type="button" className="vx-btn-outline" onClick={handleLogout}>
+                <button type="button" className="gw-logout-btn" onClick={handleLogout}>
                   Đăng xuất
                 </button>
               </>
@@ -498,10 +523,10 @@ export function App() {
                 type="button"
                 aria-label="Đăng nhập tài khoản"
                 className="vx-btn-primary"
-                style={{ padding: '8px 16px', fontSize: 13.5 }}
+                style={{ padding: '8px 15px', fontSize: 13, minHeight: 38, whiteSpace: 'nowrap' }}
                 onClick={() => setShowAuthModal(true)}
               >
-                👤 Đăng nhập / Đăng ký
+                👤 Đăng nhập
               </button>
             )}
             <button
@@ -517,14 +542,75 @@ export function App() {
           </div>
         </div>
 
-        {/* Mobile & Tablet Slide-down Drawer Menu */}
+        {/* Mobile & Tablet Slide-down Drawer Menu (Complete with Portals & Account Actions) */}
         <div id="mobile-navigation" className={`gw-mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
-          <a href="#top" onClick={() => { setActivePortal('PUBLIC'); setMobileMenuOpen(false); }}>🏠 Trang chủ</a>
-          <a href="#popular-routes" onClick={() => { setActivePortal('PUBLIC'); setMobileMenuOpen(false); }}>🔥 Tuyến đường phổ biến</a>
-          <a href="#booking-map" onClick={() => { setActivePortal('PUBLIC'); setMobileMenuOpen(false); }}>🛏️ Tìm chuyến & Sơ đồ 2 tầng</a>
-          <a href="#about" onClick={() => { setActivePortal('PUBLIC'); setMobileMenuOpen(false); }}>🛡️ Cam kết Vé Xuyên Việt</a>
-          <a href="#destinations" onClick={() => { setActivePortal('PUBLIC'); setMobileMenuOpen(false); }}>📍 Điểm đến nổi bật</a>
-          <a href="#news" onClick={() => { setActivePortal('PUBLIC'); setMobileMenuOpen(false); }}>📰 Tin tức & Cẩm nang</a>
+          <button
+            type="button"
+            className={`gw-mobile-nav-btn ${activePortal === 'PUBLIC' ? 'active' : ''}`}
+            onClick={() => { setActivePortal('PUBLIC'); setMobileMenuOpen(false); }}
+          >
+            <span>🏠 Trang chủ & Tìm chuyến</span>
+            <span>➜</span>
+          </button>
+          <button
+            type="button"
+            className={`gw-mobile-nav-btn ${activePortal === 'MY_TICKETS' ? 'active' : ''}`}
+            onClick={() => {
+              setMobileMenuOpen(false);
+              if (currentUser) setActivePortal('MY_TICKETS');
+              else setShowAuthModal(true);
+            }}
+          >
+            <span>🎟️ Đơn hàng & Vé điện tử của tôi</span>
+            <span>➜</span>
+          </button>
+          <button
+            type="button"
+            className={`gw-mobile-nav-btn ${activePortal === 'OPERATOR' ? 'active' : ''}`}
+            onClick={() => {
+              setMobileMenuOpen(false);
+              if (currentUser) setActivePortal('OPERATOR');
+              else setShowAuthModal(true);
+            }}
+          >
+            <span>🏢 Mở bán vé (Portal Hãng xe)</span>
+            <span>➜</span>
+          </button>
+          <button
+            type="button"
+            className={`gw-mobile-nav-btn ${activePortal === 'ADMIN' ? 'active' : ''}`}
+            onClick={() => {
+              setMobileMenuOpen(false);
+              if (currentUser) setActivePortal('ADMIN');
+              else setShowAuthModal(true);
+            }}
+          >
+            <span>⚙️ Quản trị sàn (Portal Admin)</span>
+            <span>➜</span>
+          </button>
+          <a href="#popular-routes" onClick={() => { setActivePortal('PUBLIC'); setMobileMenuOpen(false); }}>
+            <span>🔥 Tuyến đường phổ biến</span>
+            <span>➜</span>
+          </a>
+          <a href="#booking-map" onClick={() => { setActivePortal('PUBLIC'); setMobileMenuOpen(false); }}>
+            <span>🛏️ Sơ đồ phòng 2 tầng trực tuyến</span>
+            <span>➜</span>
+          </a>
+          <a href="#destinations" onClick={() => { setActivePortal('PUBLIC'); setMobileMenuOpen(false); }}>
+            <span>📍 Bến xe & Điểm đến</span>
+            <span>➜</span>
+          </a>
+          {currentUser && (
+            <button
+              type="button"
+              className="gw-mobile-nav-btn"
+              style={{ background: '#fee2e2', color: '#b91c1c' }}
+              onClick={() => { setMobileMenuOpen(false); void handleLogout(); }}
+            >
+              <span>🚪 Đăng xuất ({currentUser.full_name || currentUser.email})</span>
+              <span>✕</span>
+            </button>
+          )}
         </div>
       </header>
 
@@ -536,7 +622,7 @@ export function App() {
       {/* PUBLIC VEXERE OCEAN-BLUE HOMEPAGE */}
       {activePortal === 'PUBLIC' && (
         <>
-          {/* 3. OCEAN-BLUE HERO BANNER */}
+          {/* 3. VIVID SCENIC HERO BANNER WITH EMBEDDED VEXERE SEARCH WIDGET */}
           <section
             className="gw-hero"
             id="top"
@@ -547,195 +633,175 @@ export function App() {
               <span key={`sub-${slideIdx}`} className="gw-hero-sub motion-hero-text">{activeSlide.sub}</span>
               <h1 key={`title-${slideIdx}`} className="motion-hero-text">{activeSlide.title}</h1>
               <p key={`desc-${slideIdx}`} className="motion-hero-text">{activeSlide.desc}</p>
-              <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
-                <a href="#booking-map" className="gw-btn-orange">
-                  Chọn phòng 2 tầng ngay <span>➜</span>
-                </a>
-                <button
-                  type="button"
-                  onClick={() => setSlideIdx((slideIdx + 1) % HERO_SLIDES.length)}
-                  style={{
-                    background: 'rgba(255,255,255,0.16)',
-                    color: '#fff',
-                    border: '1px solid rgba(255,255,255,0.35)',
-                    borderRadius: 10,
-                    padding: '12px 18px',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                  }}
-                >
-                  Đổi banner ⟳
-                </button>
+
+              {/* 4. EMBEDDED VEXERE TABBED SEARCH WIDGET + SWAP BUTTON + 4-PILLAR TRUST STRIP */}
+              <div className="gw-search-wrap">
+                <div className="vxr-search-card">
+                  {/* Transport Mode Tabs */}
+                  <div className="vxr-mode-tabs">
+                    <button
+                      type="button"
+                      className={`vxr-mode-tab ${transportTab === 'ALL' ? 'active' : ''}`}
+                      onClick={() => {
+                        setTransportTab('ALL');
+                        setFilterVehicleKind('ALL');
+                      }}
+                    >
+                      <span>🚍</span>
+                      <span>Xe khách & Limousine 2 tầng</span>
+                      <span className="vxr-tab-badge">Giữ chỗ 10p</span>
+                    </button>
+                    <button
+                      type="button"
+                      className={`vxr-mode-tab ${transportTab === 'LIMO' ? 'active' : ''}`}
+                      onClick={() => {
+                        setTransportTab('LIMO');
+                        setFilterVehicleKind('LIMO');
+                      }}
+                    >
+                      <span>👑</span>
+                      <span>Phòng đôi Limousine VIP (2NL + 1TE)</span>
+                      <span className="vxr-tab-badge">Hot</span>
+                    </button>
+                    <button
+                      type="button"
+                      className={`vxr-mode-tab ${transportTab === 'SLEEPER' ? 'active' : ''}`}
+                      onClick={() => {
+                        setTransportTab('SLEEPER');
+                        setFilterVehicleKind('SLEEPER');
+                      }}
+                    >
+                      <span>🛏️</span>
+                      <span>Giường nằm 2 tầng tiêu chuẩn</span>
+                    </button>
+                  </div>
+
+                  {/* Search Inputs with Swap Button */}
+                  <form
+                    className="vxr-search-form"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      loadTrips();
+                      document.getElementById('booking-map')?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                  >
+                    <div className="vxr-input-box">
+                      <span className="gw-field-icon">🔵</span>
+                      <div style={{ width: '100%', minWidth: 0 }}>
+                        <span className="gw-field-label">Nơi xuất phát</span>
+                        <select
+                          className="gw-field-control"
+                          value={fromLocationId}
+                          onChange={(e) => setFromLocationId(e.target.value)}
+                        >
+                          <option value="">Tất cả điểm đi</option>
+                          {locations.map((loc) => (
+                            <option key={loc.id} value={loc.id}>
+                              {loc.province || loc.name} ({loc.name})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      className="vxr-swap-btn"
+                      title="Đổi chiều điểm đi và điểm đến"
+                      aria-label="Đổi chiều điểm đi và điểm đến"
+                      onClick={handleSwapLocations}
+                    >
+                      ⇄
+                    </button>
+
+                    <div className="vxr-input-box">
+                      <span className="gw-field-icon">📍</span>
+                      <div style={{ width: '100%', minWidth: 0 }}>
+                        <span className="gw-field-label">Nơi đến</span>
+                        <select
+                          className="gw-field-control"
+                          value={toLocationId}
+                          onChange={(e) => setToLocationId(e.target.value)}
+                        >
+                          <option value="">Tất cả điểm đến</option>
+                          {locations.map((loc) => (
+                            <option key={loc.id} value={loc.id}>
+                              {loc.province || loc.name} ({loc.name})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="vxr-input-box">
+                      <span className="gw-field-icon">📅</span>
+                      <div style={{ width: '100%', minWidth: 0 }}>
+                        <span className="gw-field-label">Ngày đi</span>
+                        <input
+                          type="date"
+                          className="gw-field-control"
+                          value={dateQuery}
+                          onChange={(e) => setDateQuery(e.target.value)}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="vxr-input-box">
+                      <span className="gw-field-icon">🗺️</span>
+                      <div style={{ width: '100%', minWidth: 0 }}>
+                        <span className="gw-field-label">Đoạn chặng nhanh</span>
+                        <select
+                          className="gw-field-control"
+                          value={segmentIdx}
+                          onChange={(e) => {
+                            const nextIdx = Number(e.target.value);
+                            setSegmentIdx(nextIdx);
+                            if (selectedTripId) {
+                              void fetchTripUnits(
+                                selectedTripId,
+                                SEGMENT_PRESETS[nextIdx].from,
+                                SEGMENT_PRESETS[nextIdx].to
+                              );
+                            }
+                          }}
+                        >
+                          {SEGMENT_PRESETS.map((seg, i) => (
+                            <option key={seg.label} value={i}>
+                              {seg.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <button type="submit" className="vxr-search-submit">
+                      🔍 Tìm kiếm
+                    </button>
+                  </form>
+
+                  {/* Vexere 4-Badge Trust Strip */}
+                  <div className="vxr-trust-strip">
+                    <div className="vxr-trust-item">
+                      <span className="vxr-trust-icon">✔</span>
+                      <span>Chắc chắn có chỗ</span>
+                    </div>
+                    <div className="vxr-trust-item">
+                      <span className="vxr-trust-icon">🎧</span>
+                      <span>Hỗ trợ 24/7</span>
+                    </div>
+                    <div className="vxr-trust-item">
+                      <span className="vxr-trust-icon">🏷️</span>
+                      <span>Giá đúng theo đoạn chặng</span>
+                    </div>
+                    <div className="vxr-trust-item">
+                      <span className="vxr-trust-icon">💳</span>
+                      <span>Thanh toán VNPay QR 100%</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
-
-          {/* 4. VEXERE TABBED SEARCH WIDGET + SWAP BUTTON + 4-PILLAR TRUST STRIP */}
-          <div className="gw-search-wrap">
-            <div className="vxr-search-card">
-              {/* Transport Mode Tabs */}
-              <div className="vxr-mode-tabs">
-                <button
-                  type="button"
-                  className={`vxr-mode-tab ${transportTab === 'ALL' ? 'active' : ''}`}
-                  onClick={() => {
-                    setTransportTab('ALL');
-                    setFilterVehicleKind('ALL');
-                  }}
-                >
-                  <span>🚍</span>
-                  <span>Xe khách & Limousine 2 tầng</span>
-                  <span className="vxr-tab-badge">Giữ chỗ 10p</span>
-                </button>
-                <button
-                  type="button"
-                  className={`vxr-mode-tab ${transportTab === 'LIMO' ? 'active' : ''}`}
-                  onClick={() => {
-                    setTransportTab('LIMO');
-                    setFilterVehicleKind('LIMO');
-                  }}
-                >
-                  <span>👑</span>
-                  <span>Phòng đôi Limousine VIP (2NL + 1TE)</span>
-                  <span className="vxr-tab-badge">Hot</span>
-                </button>
-                <button
-                  type="button"
-                  className={`vxr-mode-tab ${transportTab === 'SLEEPER' ? 'active' : ''}`}
-                  onClick={() => {
-                    setTransportTab('SLEEPER');
-                    setFilterVehicleKind('SLEEPER');
-                  }}
-                >
-                  <span>🛏️</span>
-                  <span>Giường nằm 2 tầng tiêu chuẩn</span>
-                </button>
-              </div>
-
-              {/* Search Inputs with Swap Button */}
-              <form
-                className="vxr-search-form"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  loadTrips();
-                  document.getElementById('booking-map')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-              >
-                <div className="vxr-input-box">
-                  <span className="gw-field-icon">🔵</span>
-                  <div style={{ width: '100%', minWidth: 0 }}>
-                    <span className="gw-field-label">Nơi xuất phát</span>
-                    <select
-                      className="gw-field-control"
-                      value={fromLocationId}
-                      onChange={(e) => setFromLocationId(e.target.value)}
-                    >
-                      <option value="">Tất cả điểm đi</option>
-                      {locations.map((loc) => (
-                        <option key={loc.id} value={loc.id}>
-                          {loc.province || loc.name} ({loc.name})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  className="vxr-swap-btn"
-                  title="Đổi chiều điểm đi và điểm đến"
-                  aria-label="Đổi chiều điểm đi và điểm đến"
-                  onClick={handleSwapLocations}
-                >
-                  ⇄
-                </button>
-
-                <div className="vxr-input-box">
-                  <span className="gw-field-icon">📍</span>
-                  <div style={{ width: '100%', minWidth: 0 }}>
-                    <span className="gw-field-label">Nơi đến</span>
-                    <select
-                      className="gw-field-control"
-                      value={toLocationId}
-                      onChange={(e) => setToLocationId(e.target.value)}
-                    >
-                      <option value="">Tất cả điểm đến</option>
-                      {locations.map((loc) => (
-                        <option key={loc.id} value={loc.id}>
-                          {loc.province || loc.name} ({loc.name})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="vxr-input-box">
-                  <span className="gw-field-icon">📅</span>
-                  <div style={{ width: '100%', minWidth: 0 }}>
-                    <span className="gw-field-label">Ngày đi</span>
-                    <input
-                      type="date"
-                      className="gw-field-control"
-                      value={dateQuery}
-                      onChange={(e) => setDateQuery(e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div className="vxr-input-box">
-                  <span className="gw-field-icon">🗺️</span>
-                  <div style={{ width: '100%', minWidth: 0 }}>
-                    <span className="gw-field-label">Đoạn chặng nhanh</span>
-                    <select
-                      className="gw-field-control"
-                      value={segmentIdx}
-                      onChange={(e) => {
-                        const nextIdx = Number(e.target.value);
-                        setSegmentIdx(nextIdx);
-                        if (selectedTripId) {
-                          void fetchTripUnits(
-                            selectedTripId,
-                            SEGMENT_PRESETS[nextIdx].from,
-                            SEGMENT_PRESETS[nextIdx].to
-                          );
-                        }
-                      }}
-                    >
-                      {SEGMENT_PRESETS.map((seg, i) => (
-                        <option key={seg.label} value={i}>
-                          {seg.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <button type="submit" className="vxr-search-submit">
-                  🔍 Tìm kiếm
-                </button>
-              </form>
-
-              {/* Vexere 4-Badge Trust Strip */}
-              <div className="vxr-trust-strip">
-                <div className="vxr-trust-item">
-                  <span className="vxr-trust-icon">✔</span>
-                  <span>Chắc chắn có chỗ (Giữ chỗ PostgreSQL 10 phút)</span>
-                </div>
-                <div className="vxr-trust-item">
-                  <span className="vxr-trust-icon">🎧</span>
-                  <span>Hỗ trợ khách hàng 24/7</span>
-                </div>
-                <div className="vxr-trust-item">
-                  <span className="vxr-trust-icon">🏷️</span>
-                  <span>Giá đúng theo từng đoạn chặng</span>
-                </div>
-                <div className="vxr-trust-item">
-                  <span className="vxr-trust-icon">💳</span>
-                  <span>Thanh toán VNPay QR 100% xuất vé tức thì</span>
-                </div>
-              </div>
-            </div>
-          </div>
 
           {/* 5. VEXERE "TUYẾN ĐƯỜNG PHỔ BIẾN" (4 Color-Header Cards with Instant Segment Price Tiers) */}
           <section className="gw-section" id="popular-routes">
@@ -809,9 +875,19 @@ export function App() {
               </div>
             </div>
 
+            {/* Mobile Filter Accordion Button (Visible on <= 991px) */}
+            <button
+              type="button"
+              className="vxr-mobile-filter-toggle"
+              onClick={() => setMobileFilterOpen((v) => !v)}
+            >
+              <span>🎛️ Bộ lọc & Sắp xếp (Giờ đi, Loại xe, Nhà xe)</span>
+              <span>{mobileFilterOpen ? 'Thu gọn ▴' : 'Mở bộ lọc ▾'}</span>
+            </button>
+
             <div className="vxr-booking-workspace">
               {/* Left Sticky Vexere Filter Sidebar */}
-              <aside className="vxr-filter-sidebar">
+              <aside className={`vxr-filter-sidebar ${mobileFilterOpen ? 'open-mobile' : ''}`}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                   <strong style={{ fontSize: 16, color: 'var(--gw-dark)' }}>Bộ lọc tìm kiếm</strong>
                   <button

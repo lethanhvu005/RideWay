@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap');
 
 :root {
   --gw-green: #2474e5;
@@ -39,12 +39,21 @@ body {
   padding: 0;
   width: 100%;
   overflow-x: hidden;
-  font-family: 'Be Vietnam Pro', 'Work Sans', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', 'Roboto', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
   background-color: var(--gw-bg);
   color: var(--gw-text);
-  line-height: 1.65;
-  font-size: 15px;
+  line-height: 1.55;
+  font-size: 14.5px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
 }
 
 img {
@@ -53,91 +62,58 @@ img {
   display: block;
 }
 
-/* 1. Topbar (#1C231F) */
+/* 1. Slim 1-Line Vexere Utility Topbar (#0D2E59) */
 .gw-topbar {
   background: var(--gw-dark);
-  color: #cfd6d1;
-  font-size: 13px;
-  padding: 9px clamp(16px, 3vw, 32px);
+  color: #dbeafe;
+  font-size: 12.5px;
+  padding: 7px clamp(14px, 2.5vw, 28px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .gw-topbar-inner {
-  max-width: 1290px;
+  max-width: 1320px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
 }
 
-.gw-topbar-left {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.gw-topbar-left span i {
-  color: var(--gw-green);
-  margin-right: 6px;
-}
-
+.gw-topbar-left,
 .gw-topbar-right {
   display: flex;
+  gap: 18px;
   align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.gw-book-now-top {
-  background: var(--gw-green);
-  color: #fff;
-  font-weight: 700;
-  padding: 6px 14px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-size: 12px;
-  letter-spacing: 0.03em;
+  flex-wrap: nowrap;
   white-space: nowrap;
 }
 
-.gw-portal-pill {
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  padding: 5px 11px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
+.gw-topbar-left span i,
+.gw-topbar-right span i {
+  color: var(--gw-orange);
+  margin-right: 5px;
+  font-style: normal;
 }
 
-.gw-portal-pill.active,
-.gw-portal-pill:hover {
-  background: var(--gw-green);
-  border-color: var(--gw-green);
-}
-
-/* 2. Main White Sticky Header + Responsive Mobile Drawer */
+/* 2. Unified Vexere White Sticky Header + Responsive Mobile Drawer */
 .gw-header {
   background: #ffffff;
   position: sticky;
   top: 0;
-  z-index: 50;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  z-index: 60;
+  box-shadow: 0 4px 18px rgba(13, 46, 89, 0.08);
+  border-bottom: 1px solid var(--gw-border);
 }
 
 .gw-header-inner {
-  max-width: 1290px;
+  max-width: 1320px;
   margin: 0 auto;
-  padding: 14px clamp(16px, 3vw, 32px);
+  padding: 10px clamp(14px, 2.5vw, 28px);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 14px;
 }
 
 .gw-logo {
@@ -146,28 +122,30 @@ img {
   gap: 10px;
   cursor: pointer;
   text-decoration: none;
+  flex-shrink: 0;
 }
 
 .gw-logo-mark {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
   background: linear-gradient(135deg, #2474e5 0%, #0d2e59 100%);
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 900;
   flex-shrink: 0;
-  box-shadow: 0 6px 14px rgba(36, 116, 229, 0.35);
+  box-shadow: 0 5px 12px rgba(36, 116, 229, 0.3);
 }
 
 .gw-logo-text {
-  font-size: clamp(20px, 2.5vw, 24px);
-  font-weight: 900;
+  font-size: clamp(19px, 2vw, 22px);
+  font-weight: 800;
   color: var(--gw-dark);
-  letter-spacing: -0.5px;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
 }
 
 .gw-logo-text span {
@@ -176,80 +154,156 @@ img {
 
 .gw-nav {
   display: flex;
-  gap: 24px;
+  gap: 4px;
   align-items: center;
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
 }
 
-.gw-nav a {
+.gw-nav-item {
+  appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
   text-decoration: none;
-  color: var(--gw-dark);
+  color: #192431;
   font-weight: 600;
-  font-size: 15px;
-  transition: color 0.2s;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.18s;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
 }
 
-.gw-nav a:hover {
+.gw-nav-item:hover {
   color: var(--gw-green);
+  background: var(--gw-green-light);
+}
+
+.gw-nav-item.active {
+  color: var(--gw-green);
+  background: var(--gw-green-light);
+  border-color: #bfd8fa;
 }
 
 .gw-header-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.gw-user-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--gw-green-light);
+  color: var(--gw-green-dark);
+  border: 1px solid #bfd8fa;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  max-width: 190px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+}
+
+.gw-logout-btn {
+  background: #ffffff;
+  color: var(--gw-dark);
+  border: 1px solid var(--gw-border);
+  border-radius: 9px;
+  padding: 7px 13px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.18s;
+}
+
+.gw-logout-btn:hover {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fecaca;
 }
 
 .gw-user-circle,
 .gw-hamburger-btn {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
   background: var(--gw-bg-soft);
   border: 1px solid var(--gw-border);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 17px;
+  font-size: 18px;
   color: var(--gw-dark);
+  flex-shrink: 0;
 }
 
 .gw-hamburger-btn {
   display: none;
-  border-radius: 10px;
 }
 
 .gw-mobile-menu {
   display: none;
   background: #ffffff;
   border-top: 1px solid var(--gw-border);
-  padding: 16px clamp(16px, 3vw, 32px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  padding: 14px clamp(14px, 3vw, 24px) 18px;
+  box-shadow: 0 16px 32px rgba(13, 46, 89, 0.14);
 }
 
 .gw-mobile-menu.open {
   display: grid;
-  gap: 12px;
+  gap: 8px;
 }
 
-.gw-mobile-menu a {
+.gw-mobile-menu a,
+.gw-mobile-menu .gw-mobile-nav-btn {
   text-decoration: none;
   color: var(--gw-dark);
   font-weight: 700;
-  padding: 10px 12px;
-  border-radius: 8px;
+  font-size: 14px;
+  padding: 11px 14px;
+  border-radius: 10px;
   background: var(--gw-bg-soft);
-}
-
-/* 3. Fullscreen Hero Slider */
-.gw-hero {
-  position: relative;
-  min-height: clamp(460px, 65vh, 620px);
-  background-size: cover;
-  background-position: center;
+  border: 1px solid transparent;
   display: flex;
   align-items: center;
-  padding: clamp(48px, 8vw, 90px) clamp(16px, 3vw, 32px) clamp(90px, 12vw, 150px);
+  justify-content: space-between;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+}
+
+.gw-mobile-menu .gw-mobile-nav-btn.active {
+  background: var(--gw-green-light);
+  color: var(--gw-green-dark);
+  border-color: #93c5fd;
+}
+
+/* 3. Clear Scenic Vexere Hero Banner with Embedded Search Box */
+.gw-hero {
+  position: relative;
+  min-height: 460px;
+  background-size: cover;
+  background-position: center 52%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(28px, 4vw, 44px) clamp(14px, 2.5vw, 28px) clamp(32px, 4vw, 48px);
   color: #ffffff;
 }
 
@@ -257,43 +311,57 @@ img {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(13, 46, 89, 0.9) 0%, rgba(20, 74, 150, 0.68) 58%, rgba(13, 46, 89, 0.38) 100%);
+  /* Ultra-clean subtle Vexere scrim so background scenery is bright and never covered */
+  background: linear-gradient(
+    180deg,
+    rgba(16, 45, 68, 0.14) 0%,
+    rgba(16, 45, 68, 0.18) 50%,
+    rgba(16, 45, 68, 0.36) 100%
+  );
 }
 
 .gw-hero-inner {
   position: relative;
   z-index: 2;
-  max-width: 1290px;
+  max-width: 1220px;
   width: 100%;
   margin: 0 auto;
+  text-align: center;
 }
 
 .gw-hero-sub {
-  display: inline-block;
-  background: var(--gw-orange);
-  color: #0d2e59;
-  font-weight: 800;
-  font-size: clamp(12px, 1.5vw, 14px);
-  padding: 6px 16px;
-  border-radius: 8px;
-  margin-bottom: 16px;
-  box-shadow: 0 6px 16px rgba(255, 199, 0, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(13, 46, 89, 0.65);
+  backdrop-filter: blur(6px);
+  color: #ffd633;
+  border: 1px solid rgba(255, 214, 51, 0.45);
+  font-weight: 600;
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-bottom: 10px;
 }
 
 .gw-hero h1 {
-  font-size: clamp(28px, 4.8vw, 54px);
-  font-weight: 800;
-  line-height: 1.16;
-  margin: 0 0 16px;
-  max-width: 720px;
-  letter-spacing: -0.8px;
+  font-size: clamp(23px, 2.8vw, 34px);
+  font-weight: 700;
+  line-height: 1.28;
+  margin: 0 auto 6px;
+  max-width: 820px;
+  letter-spacing: -0.015em;
+  text-shadow: 0 2px 12px rgba(14, 40, 58, 0.55);
 }
 
 .gw-hero p {
-  font-size: clamp(14px, 1.8vw, 17px);
-  color: rgba(255, 255, 255, 0.92);
-  max-width: 620px;
-  margin: 0 0 24px;
+  font-size: clamp(13.5px, 1.3vw, 15px);
+  font-weight: 500;
+  color: #ffffff;
+  max-width: 680px;
+  margin: 0 auto 20px;
+  text-shadow: 0 1px 8px rgba(14, 40, 58, 0.55);
 }
 
 .gw-btn-green,
@@ -329,13 +397,14 @@ img {
   background: #e6b300;
 }
 
-/* 4. Overlapping Horizontal Search Bar */
+/* 4. Embedded Search Wrap inside Hero (Vexere style) */
 .gw-search-wrap {
-  max-width: 1290px;
-  margin: -65px auto 0;
-  padding: 0 clamp(16px, 3vw, 32px);
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
   position: relative;
   z-index: 30;
+  text-align: left;
 }
 
 .gw-search-box {
@@ -417,12 +486,12 @@ img {
 }
 
 .gw-sec-title {
-  font-size: clamp(24px, 3.4vw, 38px);
-  font-weight: 800;
-  color: var(--gw-dark);
-  margin: 0 0 16px;
-  line-height: 1.24;
-  letter-spacing: -0.5px;
+  font-size: clamp(21px, 2.4vw, 28px);
+  font-weight: 700;
+  color: #1c2a38;
+  margin: 0 0 14px;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
 }
 
 /* 5. Activity Grid (5 cols -> 3 cols -> 2 cols -> 1 col) */
@@ -757,9 +826,10 @@ img {
   color: #475569;
 }
 .vx-price-big {
-  font-size: clamp(18px, 2.2vw, 22px);
-  font-weight: 900;
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 700;
   color: var(--gw-green);
+  font-variant-numeric: tabular-nums;
 }
 .vx-input,
 .vx-select {
@@ -1260,10 +1330,11 @@ img {
 }
 
 .vxr-timeline-time {
-  font-size: 20px;
-  font-weight: 900;
-  color: var(--gw-dark);
-  line-height: 1.1;
+  font-size: 19px;
+  font-weight: 700;
+  color: #192431;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
 }
 
 .vxr-timeline-loc {
@@ -1313,7 +1384,30 @@ img {
   border-radius: 6px;
 }
 
+.vxr-mobile-filter-toggle {
+  display: none;
+  width: 100%;
+  background: #ffffff;
+  color: var(--gw-dark);
+  border: 1.5px solid var(--gw-green);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-weight: 800;
+  font-size: 14px;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 12px;
+  box-shadow: var(--gw-shadow);
+}
+
 @media (max-width: 1200px) {
+  .gw-nav {
+    display: none;
+  }
+  .gw-hamburger-btn {
+    display: flex;
+  }
   .vxr-search-form {
     grid-template-columns: 1fr auto 1fr;
   }
@@ -1326,11 +1420,25 @@ img {
 }
 
 @media (max-width: 991px) {
-  .vxr-booking-workspace {
-    grid-template-columns: 1fr;
+  .gw-topbar-right {
+    display: none;
+  }
+  .gw-topbar-inner {
+    justify-content: center;
+  }
+  .vxr-mobile-filter-toggle {
+    display: flex;
   }
   .vxr-filter-sidebar {
     position: static;
+    display: none;
+    margin-bottom: 16px;
+  }
+  .vxr-filter-sidebar.open-mobile {
+    display: block;
+  }
+  .vxr-booking-workspace {
+    grid-template-columns: 1fr;
   }
   .vxr-trip-main {
     grid-template-columns: 1fr;
@@ -1340,25 +1448,89 @@ img {
     border-top: 1px dashed var(--gw-border);
     padding-left: 0;
     padding-top: 14px;
-    align-items: flex-start;
+    align-items: stretch;
     text-align: left;
   }
 }
 
 @media (max-width: 640px) {
-  .vxr-search-form,
+  .gw-topbar {
+    font-size: 11.5px;
+    padding: 5px 10px;
+  }
+  .gw-topbar-left span:nth-child(2) {
+    display: none;
+  }
+  .gw-header-inner {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  .gw-user-pill {
+    max-width: 125px;
+    font-size: 12px;
+    padding: 5px 9px;
+  }
+  .gw-logout-btn {
+    display: none;
+  }
+  .gw-hero {
+    min-height: 0;
+    padding: 20px 12px 26px;
+  }
+  .gw-hero h1 {
+    font-size: 21px;
+  }
+  .gw-hero p {
+    font-size: 13px;
+    margin-bottom: 14px;
+  }
+  .vxr-mode-tabs {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 0 10px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .vxr-mode-tab {
+    padding: 11px 12px;
+    font-size: 13px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .vxr-search-form {
+    grid-template-columns: 1fr;
+    padding: 14px;
+    gap: 10px;
+  }
+  .vxr-swap-btn {
+    width: 34px;
+    height: 34px;
+    margin: -4px auto;
+    transform: rotate(90deg);
+  }
+  .vxr-trust-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 12px;
+    padding: 10px 12px;
+    font-size: 11.5px;
+  }
   .vxr-popular-grid {
     grid-template-columns: 1fr;
   }
-  .vxr-swap-btn {
-    margin: 0 auto;
-    transform: rotate(90deg);
+  .vxr-trip-card {
+    padding: 14px;
   }
   .vxr-timeline {
-    flex-direction: column;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 8px;
+    padding: 10px;
   }
-  .vxr-timeline-line {
-    display: none;
+  .vxr-timeline-point {
+    min-width: 0;
+  }
+  .vxr-timeline-time {
+    font-size: 16px;
   }
 }

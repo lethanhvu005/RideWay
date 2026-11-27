@@ -19,7 +19,9 @@ from fleet.models import LayoutUnit, SeatLayout, Vehicle, VehicleType
 User = get_user_model()
 
 
-@override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
+@override_settings(
+    MAILERS={'default': {'BACKEND': 'django.core.mail.backends.locmem.EmailBackend'}},
+)
 class AccountsSecurityAndConstraintTests(TestCase):
     def setUp(self):
         self.client = APIClient()

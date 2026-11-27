@@ -239,12 +239,12 @@ img {
   background: var(--gw-orange);
 }
 
-/* 4. Search Wrap Placed Below Hero Section */
+/* 4. Search Wrap Placed Higher & Larger Over Hero Bottom Edge */
 .gw-search-wrap {
-  max-width: 1290px;
+  max-width: 1380px;
   width: 100%;
-  margin: -38px auto 0;
-  padding: 0 clamp(16px, 3vw, 32px);
+  margin: -96px auto 0;
+  padding: 0 clamp(16px, 2.5vw, 28px);
   position: relative;
   z-index: 30;
   text-align: left;
@@ -1093,12 +1093,12 @@ img {
    VEXERE.COM INSPIRED OCEAN-BLUE UI COMPONENTS
    ========================================================================== */
 
-/* 1. Vexere Tabbed Search Card & Trust Strip */
+/* 1. Vexere Tabbed Search Card & Trust Strip (Enlarged & Prominent) */
 .vxr-search-card {
   background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 18px 48px rgba(13, 46, 89, 0.18);
-  border: 1px solid #cfe2fc;
+  border-radius: 20px;
+  box-shadow: 0 22px 58px rgba(13, 46, 89, 0.22);
+  border: 1.5px solid #c5dcf8;
   overflow: hidden;
 }
 
@@ -1107,22 +1107,22 @@ img {
   justify-content: center;
   border-bottom: 1px solid var(--gw-border);
   background: #f7faff;
-  padding: 0 16px;
-  gap: 8px;
+  padding: 0 20px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .vxr-mode-tab {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 14px 20px;
+  gap: 10px;
+  padding: 17px 26px;
   border: none;
-  border-bottom: 3px solid transparent;
+  border-bottom: 3.5px solid transparent;
   background: transparent;
   color: var(--gw-muted);
   font-weight: 700;
-  font-size: 14.5px;
+  font-size: 16px;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -1137,45 +1137,60 @@ img {
 .vxr-tab-badge {
   background: #ffc700;
   color: #0d2e59;
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-weight: 800;
-  padding: 2px 7px;
+  padding: 3px 9px;
   border-radius: 999px;
 }
 
 .vxr-search-form {
-  padding: clamp(16px, 2.2vw, 22px);
+  padding: clamp(22px, 2.8vw, 30px);
   display: grid;
-  grid-template-columns: 1.15fr auto 1.15fr 0.95fr 1.1fr auto;
-  gap: 12px;
+  grid-template-columns: 1.18fr auto 1.18fr 0.95fr 1.15fr auto;
+  gap: 14px;
   align-items: center;
 }
 
 .vxr-input-box {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border: 1px solid var(--gw-border);
-  border-radius: 12px;
+  gap: 12px;
+  padding: 13px 18px;
+  min-height: 68px;
+  border: 1.5px solid var(--gw-border);
+  border-radius: 14px;
   background: #ffffff;
   transition: border-color 0.2s, box-shadow 0.2s;
   min-width: 0;
 }
 
+.vxr-input-box .gw-field-icon {
+  font-size: 25px;
+}
+
+.vxr-input-box .gw-field-label {
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+.vxr-input-box .gw-field-control {
+  font-size: 16px;
+  font-weight: 700;
+}
+
 .vxr-input-box:focus-within {
   border-color: var(--gw-green);
-  box-shadow: 0 0 0 3px rgba(36, 116, 229, 0.14);
+  box-shadow: 0 0 0 3.5px rgba(36, 116, 229, 0.16);
 }
 
 .vxr-swap-btn {
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  border: 1px solid #c5dcf8;
+  border: 1.5px solid #c5dcf8;
   background: var(--gw-green-light);
   color: var(--gw-green);
-  font-size: 17px;
+  font-size: 19px;
   font-weight: 800;
   display: flex;
   align-items: center;
@@ -1195,15 +1210,15 @@ img {
   background: #ffc700;
   color: #0d2e59;
   border: none;
-  border-radius: 12px;
-  padding: 14px 26px;
-  min-height: 54px;
+  border-radius: 14px;
+  padding: 16px 32px;
+  min-height: 68px;
   font-weight: 800;
-  font-size: 15.5px;
+  font-size: 17px;
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
-  box-shadow: 0 8px 20px rgba(255, 199, 0, 0.32);
+  box-shadow: 0 10px 24px rgba(255, 199, 0, 0.36);
 }
 
 .vxr-search-submit:hover {
@@ -1214,13 +1229,13 @@ img {
 .vxr-trust-strip {
   background: linear-gradient(90deg, #0d2e59 0%, #1858b8 100%);
   color: #ffffff;
-  padding: 11px 20px;
+  padding: 14px 24px;
   display: flex;
   justify-content: space-around;
   align-items: center;
   flex-wrap: wrap;
-  gap: 14px;
-  font-size: 13px;
+  gap: 16px;
+  font-size: 14px;
   font-weight: 600;
 }
 

@@ -131,28 +131,49 @@ img {
   border-color: var(--gw-green);
 }
 
-/* 3. Clear Scenic Hero Banner (Left-aligned copy, search box sits below) */
+/* 3. Large Clear Scenic Hero Slider (NO blue tint overlay, smooth automatic crossfade) */
 .gw-hero {
   position: relative;
-  min-height: clamp(440px, 56vh, 560px);
-  background-size: cover;
-  background-position: center 45%;
+  min-height: clamp(560px, 76vh, 720px);
+  background-color: #0b1320;
   display: flex;
   align-items: center;
-  padding: clamp(44px, 6vw, 76px) clamp(16px, 3vw, 32px) clamp(64px, 8vw, 96px);
+  padding: clamp(72px, 9vw, 120px) clamp(16px, 3vw, 32px) clamp(96px, 12vw, 150px);
   color: #ffffff;
+  overflow: hidden;
+}
+
+.gw-hero-slide-layer {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 45%;
+  opacity: 0;
+  transform: scale(1.06);
+  transition: opacity 1.35s cubic-bezier(0.22, 1, 0.36, 1), transform 6.5s ease-out;
+  will-change: opacity, transform;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.gw-hero-slide-layer.active {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .gw-hero::before {
   content: '';
   position: absolute;
   inset: 0;
+  /* Pure natural photo without any blue tint — only a subtle soft dark vignette on the left behind white text */
   background: linear-gradient(
     90deg,
-    rgba(13, 46, 89, 0.62) 0%,
-    rgba(13, 46, 89, 0.34) 55%,
-    rgba(13, 46, 89, 0.12) 100%
+    rgba(0, 0, 0, 0.36) 0%,
+    rgba(0, 0, 0, 0.14) 48%,
+    rgba(0, 0, 0, 0) 100%
   );
+  z-index: 1;
+  pointer-events: none;
 }
 
 .gw-hero-inner {
@@ -169,30 +190,53 @@ img {
   background: var(--gw-orange);
   color: #0d2e59;
   font-weight: 700;
-  font-size: clamp(12px, 1.3vw, 13.5px);
-  padding: 6px 16px;
+  font-size: clamp(12.5px, 1.3vw, 14px);
+  padding: 7px 16px;
   border-radius: 8px;
-  margin-bottom: 14px;
-  box-shadow: 0 6px 16px rgba(255, 199, 0, 0.3);
+  margin-bottom: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
 }
 
 .gw-hero h1 {
-  font-size: clamp(26px, 4vw, 46px);
+  font-size: clamp(30px, 4.4vw, 52px);
   font-weight: 800;
-  line-height: 1.18;
-  margin: 0 0 14px;
-  max-width: 720px;
+  line-height: 1.16;
+  margin: 0 0 16px;
+  max-width: 760px;
   letter-spacing: -0.02em;
-  text-shadow: 0 2px 14px rgba(9, 30, 66, 0.55);
+  text-shadow: 0 3px 20px rgba(0, 0, 0, 0.65);
 }
 
 .gw-hero p {
-  font-size: clamp(14px, 1.5vw, 16px);
+  font-size: clamp(14.5px, 1.6vw, 17px);
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.96);
-  max-width: 620px;
-  margin: 0 0 22px;
-  text-shadow: 0 1px 10px rgba(9, 30, 66, 0.55);
+  color: #ffffff;
+  max-width: 640px;
+  margin: 0 0 26px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.72);
+}
+
+.gw-hero-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+}
+
+.gw-hero-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.35s ease;
+}
+
+.gw-hero-dot.active {
+  width: 28px;
+  background: var(--gw-orange);
 }
 
 /* 4. Search Wrap Placed Below Hero Section */

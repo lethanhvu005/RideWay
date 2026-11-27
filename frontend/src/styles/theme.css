@@ -261,13 +261,13 @@ img {
 }
 
 .gw-header-inner {
-  max-width: 1320px;
+  max-width: 1360px;
   margin: 0 auto;
-  padding: 10px clamp(14px, 2.5vw, 28px);
+  padding: 10px clamp(14px, 2vw, 24px);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: 16px;
 }
 
 .gw-logo {
@@ -308,11 +308,13 @@ img {
 
 .gw-nav {
   display: flex;
-  gap: 4px;
+  gap: 6px;
   align-items: center;
-  flex: 1;
   justify-content: center;
+  flex-wrap: nowrap;
+  flex: 1 1 auto;
   min-width: 0;
+  overflow: hidden;
 }
 
 .gw-nav-item {
@@ -322,15 +324,15 @@ img {
   text-decoration: none;
   color: #192431;
   font-weight: 600;
-  font-size: 14px;
-  padding: 8px 12px;
+  font-size: 13.5px;
+  padding: 7px 10px;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.18s;
   white-space: nowrap;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   font-family: inherit;
 }
 
@@ -781,19 +783,28 @@ img {
   margin-bottom: 6px;
 }
 
-/* 2-Deck Seat Layout Responsive Grids */
+/* 2-Deck Seat Layout Responsive Grids (Zero horizontal overflow or card overlap) */
 .gw-seat-layout-wrapper {
   display: grid;
-  grid-template-columns: 1.65fr 1fr;
-  gap: 20px;
+  grid-template-columns: minmax(0, 1.75fr) minmax(260px, 1fr);
+  gap: 18px;
   margin-top: 16px;
   align-items: start;
 }
 
+.gw-seat-layout-wrapper > * {
+  min-width: 0;
+}
+
 .gw-decks-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+}
+
+.gw-deck-panel {
+  min-width: 0;
+  overflow: hidden;
 }
 
 .gw-deck-mobile-tabs {
@@ -1004,8 +1015,11 @@ img {
    MULTI-DEVICE RESPONSIVE BREAKPOINTS (Laptop, Tablet Landscape/Portrait, Mobile)
    ========================================================================== */
 
-/* 1. Laptop & Tablet Landscape (<= 1200px) */
-@media (max-width: 1200px) {
+/* 1. Laptop & Tablet Landscape (<= 1240px) */
+@media (max-width: 1240px) {
+  .gw-seat-layout-wrapper {
+    grid-template-columns: 1fr;
+  }
   .gw-activity-grid {
     grid-template-columns: repeat(3, 1fr);
   }

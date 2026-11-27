@@ -497,12 +497,11 @@ export function App() {
           </div>
 
           <nav className="gw-nav" aria-label="Điều hướng chính">
-            <a href="#top" className="gw-nav-item" onClick={() => setActivePortal('PUBLIC')}>Xe khách & Limousine</a>
             <a href="#popular-routes" className="gw-nav-item" onClick={() => setActivePortal('PUBLIC')}>Tuyến phổ biến</a>
             <a href="#booking-map" className="gw-nav-item" onClick={() => setActivePortal('PUBLIC')}>Lịch trình & Sơ đồ 2 tầng</a>
             <a href="#about" className="gw-nav-item" onClick={() => setActivePortal('PUBLIC')}>Ưu điểm nền tảng</a>
             <a href="#destinations" className="gw-nav-item" onClick={() => setActivePortal('PUBLIC')}>Bến xe & Điểm đến</a>
-            <a href="#news" className="gw-nav-item" onClick={() => setActivePortal('PUBLIC')}>Cẩm nang di chuyển</a>
+            <a href="#news" className="gw-nav-item" onClick={() => setActivePortal('PUBLIC')}>Cẩm nang</a>
           </nav>
 
           <div className="gw-header-actions">
@@ -1155,61 +1154,61 @@ export function App() {
                     );
                   })}
                 </div>
+              </div>
+            </div>
 
-                {/* Embedded Live 2-Deck Seat Map for Selected Trip */}
-                <div id="live-2deck-map" style={{ marginTop: 24 }}>
-                  <div className="vx-card" style={{ background: 'var(--gw-bg-soft)', border: '1.5px solid #b6d4fa' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12, marginBottom: 12 }}>
-                      <div>
-                        <span className="gw-sub-pill">SƠ ĐỒ PHÒNG / GIƯỜNG 2 TẦNG TRỰC QUAN</span>
-                        <h3 style={{ margin: '4px 0 0', fontSize: 20, color: 'var(--gw-dark)' }}>
-                          Chọn vị trí phòng đôi (2NL + 1TE) hoặc giường đơn trên sơ đồ
-                        </h3>
-                      </div>
+            {/* Full-Width Live 2-Deck Seat Map for Selected Trip (Spans full 1290px width below filter & trip list) */}
+            <div id="live-2deck-map" style={{ marginTop: 28 }}>
+              <div className="vx-card" style={{ background: 'var(--gw-bg-soft)', border: '1.5px solid #b6d4fa' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12, marginBottom: 12 }}>
+                  <div>
+                    <span className="gw-sub-pill">SƠ ĐỒ PHÒNG / GIƯỜNG 2 TẦNG TRỰC QUAN</span>
+                    <h3 style={{ margin: '4px 0 0', fontSize: 20, color: 'var(--gw-dark)' }}>
+                      Chọn vị trí phòng đôi (2NL + 1TE) hoặc giường đơn trên sơ đồ
+                    </h3>
+                  </div>
 
-                      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                        <select
-                          className="vx-select"
-                          style={{ width: 'auto', minWidth: 240 }}
-                          value={segmentIdx}
-                          onChange={(e) => {
-                            const idx = Number(e.target.value);
-                            setSegmentIdx(idx);
-                            if (selectedTripId) {
-                              void fetchTripUnits(
-                                selectedTripId,
-                                SEGMENT_PRESETS[idx].from,
-                                SEGMENT_PRESETS[idx].to
-                              );
-                            }
-                          }}
-                        >
-                          {SEGMENT_PRESETS.map((s, idx) => (
-                            <option key={s.label} value={idx}>
-                              {s.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    {holdError && (
-                      <div style={{ padding: 12, background: '#fef2f2', color: 'var(--gw-danger)', borderRadius: 10, marginBottom: 12, fontWeight: 700 }}>
-                        ⚠️ {holdError}
-                      </div>
-                    )}
-
-                    <SeatLayout2Deck
-                      units={units}
-                      selectedMap={selectedMap}
-                      onToggleUnit={handleToggleUnit}
-                      onUpdateCounts={handleUpdateCounts}
-                      onProceedHold={handleProceedHold}
-                      segmentLabel={SEGMENT_PRESETS[segmentIdx].label}
-                      holdingBusy={holdingBusy}
-                    />
+                  <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                    <select
+                      className="vx-select"
+                      style={{ width: 'auto', minWidth: 260 }}
+                      value={segmentIdx}
+                      onChange={(e) => {
+                        const idx = Number(e.target.value);
+                        setSegmentIdx(idx);
+                        if (selectedTripId) {
+                          void fetchTripUnits(
+                            selectedTripId,
+                            SEGMENT_PRESETS[idx].from,
+                            SEGMENT_PRESETS[idx].to
+                          );
+                        }
+                      }}
+                    >
+                      {SEGMENT_PRESETS.map((s, idx) => (
+                        <option key={s.label} value={idx}>
+                          {s.label}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
+
+                {holdError && (
+                  <div style={{ padding: 12, background: '#fef2f2', color: 'var(--gw-danger)', borderRadius: 10, marginBottom: 12, fontWeight: 700 }}>
+                    ⚠️ {holdError}
+                  </div>
+                )}
+
+                <SeatLayout2Deck
+                  units={units}
+                  selectedMap={selectedMap}
+                  onToggleUnit={handleToggleUnit}
+                  onUpdateCounts={handleUpdateCounts}
+                  onProceedHold={handleProceedHold}
+                  segmentLabel={SEGMENT_PRESETS[segmentIdx].label}
+                  holdingBusy={holdingBusy}
+                />
               </div>
             </div>
           </section>

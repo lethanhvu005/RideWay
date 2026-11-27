@@ -4,4 +4,4 @@ body { margin: 0; min-width: 320px; }
 button, input, select, textarea { font: inherit; }
 a, button, input, select { -webkit-tap-highlight-color: transparent; }
 :focus-visible { outline: 3px solid #e6a23c; outline-offset: 4px; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *:not(.gw-hero-slide-layer):not(.gw-hero-dot):not(.mona-discover-track):not(.mona-discover-dot), *::before, *::after { transition: none !important; animation: none !important; } }

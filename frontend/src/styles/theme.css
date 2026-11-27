@@ -1674,3 +1674,211 @@ img {
     font-size: 16px;
   }
 }
+
+/* ==========================================================================
+   MULTI-PAGE ROUTER LAYOUTS (Public Dropdown, Subpage Banner, Account, Partner & Admin Dashboards)
+   ========================================================================== */
+.gw-logo-mark {
+  background: linear-gradient(135deg, #2474e5 0%, #0d2e59 100%);
+  box-shadow: 0 5px 12px rgba(36, 116, 229, 0.3);
+}
+
+.vxr-trust-strip {
+  background: linear-gradient(90deg, #0d2e59 0%, #1858b8 100%);
+}
+
+.vxr-rating-pill {
+  background: var(--gw-green);
+}
+
+.rw-nav-dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.rw-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  background: #ffffff;
+  border: 1px solid var(--gw-border);
+  border-radius: 12px;
+  box-shadow: 0 16px 36px rgba(13, 46, 89, 0.16);
+  padding: 8px;
+  display: grid;
+  gap: 4px;
+  z-index: 80;
+}
+
+.rw-dropdown-link {
+  text-decoration: none;
+  color: var(--gw-text);
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 9px 12px;
+  border-radius: 8px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.rw-dropdown-link:hover,
+.rw-dropdown-link.active {
+  background: var(--gw-green-light);
+  color: var(--gw-green-dark);
+}
+
+.gw-nav {
+  overflow: visible;
+}
+
+.rw-page-banner {
+  background: linear-gradient(135deg, #0d2e59 0%, #154580 55%, #2474e5 100%);
+  color: #ffffff;
+  padding: clamp(28px, 4vw, 44px) 0 clamp(36px, 5vw, 52px);
+}
+
+.rw-account-grid {
+  display: grid;
+  grid-template-columns: 270px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.rw-account-sidebar {
+  position: sticky;
+  top: 86px;
+}
+
+.rw-side-nav {
+  display: grid;
+  gap: 6px;
+}
+
+.rw-side-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--gw-text);
+  font-weight: 600;
+  font-size: 14px;
+  transition: background 0.18s, color 0.18s;
+}
+
+.rw-side-link:hover,
+.rw-side-link.active {
+  background: var(--gw-green-light);
+  color: var(--gw-green-dark);
+}
+
+/* Partner (/doi-tac) & Admin (/admin) Standalone Dashboard Shells */
+.rw-dashboard-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 270px 1fr;
+  background: #f2f7ff;
+}
+
+.rw-dashboard-sidebar {
+  background: #0d2e59;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 14px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.rw-admin-sidebar {
+  background: #081e3b;
+}
+
+.rw-dashboard-brand {
+  padding: 6px 10px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  margin-bottom: 12px;
+}
+
+.rw-dashboard-nav {
+  display: grid;
+  gap: 5px;
+  flex: 1;
+  align-content: start;
+}
+
+.rw-dash-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: #dbeafe;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13.5px;
+  transition: background 0.18s, color 0.18s;
+}
+
+.rw-dash-link:hover,
+.rw-dash-link.active {
+  background: var(--gw-green);
+  color: #ffffff;
+}
+
+.rw-dashboard-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 12px;
+  margin-top: 12px;
+  display: grid;
+  gap: 4px;
+}
+
+.rw-dashboard-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.rw-dashboard-topbar {
+  background: #ffffff;
+  border-bottom: 1px solid var(--gw-border);
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.rw-dashboard-content {
+  padding: clamp(18px, 3vw, 28px);
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 991px) {
+  .rw-account-grid,
+  .rw-dashboard-shell {
+    grid-template-columns: 1fr;
+  }
+  .rw-account-sidebar,
+  .rw-dashboard-sidebar {
+    position: static;
+    height: auto;
+  }
+  .rw-dashboard-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+}

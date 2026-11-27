@@ -1,4 +1,5 @@
-const API_BASE = '/api/v1';
+const rawBase = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim();
+export const API_BASE = rawBase ? rawBase.replace(/\/+$/, '') : '/api/v1';
 
 function getCookie(name: string): string | null {
   const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));

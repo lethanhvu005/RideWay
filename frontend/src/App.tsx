@@ -68,13 +68,25 @@ const HERO_SLIDES = [
     sub: 'Cam kết hoàn 150% nếu nhà xe không giữ chỗ • Vé Xuyên Việt',
     title: 'Đặt vé xe khách & Limousine 2 tầng Xuyên Việt trực tuyến',
     desc: 'Chọn chính xác vị trí phòng đôi VIP (2NL + 1TE) hoặc giường nằm theo từng đoạn chặng. Giữ chỗ nguyên tử 10 phút, thanh toán VNPay QR 100% xuất vé điện tử tức thì.',
-    bg: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1800&q=80',
+    bg: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1920&q=85',
   },
   {
     sub: '50+ Nhà xe Limousine & Giường nằm 2 tầng uy tín',
     title: 'Hành trình êm ái dọc dải đất hình chữ S',
     desc: 'Kết nối Hà Nội – Cố đô Huế – Đà Nẵng – TP.HCM với giá vé tính đúng trên đoạn chặng bạn đi, không lo trả thừa giá toàn tuyến.',
-    bg: 'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=1800&q=80',
+    bg: 'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=1920&q=85',
+  },
+  {
+    sub: 'Khoang Phòng Đôi VIP • Giữ chỗ nguyên tử 10 phút',
+    title: 'Khám phá vùng núi & cung đường hùng vĩ Việt Nam',
+    desc: 'Tận hưởng những chuyến hành trình xuyên Việt êm ái trên xe Limousine 20 phòng đôi & giường nằm 2 tầng với sơ đồ chọn chỗ thời gian thực.',
+    bg: '/images/terraces-banner.jpg',
+  },
+  {
+    sub: 'Thanh toán VNPay QR 100% • Vé điện tử HMAC an toàn',
+    title: 'Trải nghiệm du lịch đường dài tiện nghi & an tâm',
+    desc: 'Hỗ trợ đón trả tận nơi, báo giá minh bạch theo từng chặng và xuất vé điện tử QR ngay sau khi đối chiếu thanh toán.',
+    bg: 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1920&q=85',
   },
 ];
 
@@ -386,6 +398,15 @@ export function App() {
 
   const activeSlide = HERO_SLIDES[slideIdx];
 
+  /* Smooth automatic hero slider rotation every 4 seconds */
+  useEffect(() => {
+    if (activePortal !== 'PUBLIC') return;
+    const timer = window.setInterval(() => {
+      setSlideIdx((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, 4000);
+    return () => window.clearInterval(timer);
+  }, [activePortal]);
+
   /* Filter trips client-side according to Vexere Sidebar selections */
   const uniqueOperators = Array.from(
     new Map(trips.map((t) => [t.operator_id, { id: t.operator_id, name: t.operator_name }])).values()
@@ -584,13 +605,16 @@ export function App() {
       {/* PUBLIC VEXERE OCEAN-BLUE HOMEPAGE */}
       {activePortal === 'PUBLIC' && (
         <>
-          {/* 3. OCEAN-BLUE HERO BANNER (Left-aligned text + buttons, background uncovered) */}
-          <section
-            className="gw-hero"
-            id="top"
-            style={{ backgroundImage: `url(${activeSlide.bg})` }}
-          >
-            <div className="motion-hero-image" key={`image-${slideIdx}`} style={{ backgroundImage: `url(${activeSlide.bg})` }} aria-hidden="true" />
+          {/* 3. FULL-SIZE CLEAR SCENIC HERO SLIDER (No blue tint, smooth automatic crossfade) */}
+          <section className="gw-hero" id="top">
+            {HERO_SLIDES.map((s, idx) => (
+              <div
+                key={s.bg}
+                className={`gw-hero-slide-layer ${idx === slideIdx ? 'active' : ''}`}
+                style={{ backgroundImage: `url(${s.bg})` }}
+                aria-hidden="true"
+              />
+            ))}
             <div className="gw-hero-inner">
               <span key={`sub-${slideIdx}`} className="gw-hero-sub motion-hero-text">{activeSlide.sub}</span>
               <h1 key={`title-${slideIdx}`} className="motion-hero-text">{activeSlide.title}</h1>
@@ -603,9 +627,10 @@ export function App() {
                   type="button"
                   onClick={() => setSlideIdx((slideIdx + 1) % HERO_SLIDES.length)}
                   style={{
-                    background: 'rgba(255,255,255,0.18)',
+                    background: 'rgba(15, 23, 42, 0.45)',
+                    backdropFilter: 'blur(6px)',
                     color: '#fff',
-                    border: '1px solid rgba(255,255,255,0.4)',
+                    border: '1px solid rgba(255,255,255,0.45)',
                     borderRadius: 10,
                     padding: '12px 18px',
                     fontWeight: 700,
@@ -614,6 +639,19 @@ export function App() {
                 >
                   Đổi banner ⟳
                 </button>
+                <div className="gw-hero-dots" role="tablist" aria-label="Chọn slide ảnh bìa">
+                  {HERO_SLIDES.map((s, idx) => (
+                    <button
+                      key={s.title}
+                      type="button"
+                      role="tab"
+                      aria-selected={idx === slideIdx}
+                      aria-label={`Slide ${idx + 1}`}
+                      className={`gw-hero-dot ${idx === slideIdx ? 'active' : ''}`}
+                      onClick={() => setSlideIdx(idx)}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </section>

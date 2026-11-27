@@ -239,12 +239,12 @@ img {
   background: var(--gw-orange);
 }
 
-/* 4. Search Wrap Placed Higher & Larger Over Hero Bottom Edge */
+/* 4. Compact Search Wrap Placed Over Hero Bottom Edge */
 .gw-search-wrap {
-  max-width: 1380px;
+  max-width: 1120px;
   width: 100%;
-  margin: -96px auto 0;
-  padding: 0 clamp(16px, 2.5vw, 28px);
+  margin: -72px auto 0;
+  padding: 0 clamp(16px, 2.5vw, 24px);
   position: relative;
   z-index: 30;
   text-align: left;
@@ -1107,12 +1107,12 @@ img {
    VEXERE.COM INSPIRED OCEAN-BLUE UI COMPONENTS
    ========================================================================== */
 
-/* 1. Vexere Tabbed Search Card & Trust Strip (Enlarged & Prominent) */
+/* 1. Vexere Tabbed Search Card & Trust Strip (Compact & Sleek) */
 .vxr-search-card {
   background: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 22px 58px rgba(13, 46, 89, 0.22);
-  border: 1.5px solid #c5dcf8;
+  border-radius: 14px;
+  box-shadow: 0 14px 38px rgba(13, 46, 89, 0.16);
+  border: 1px solid #c5dcf8;
   overflow: hidden;
 }
 
@@ -1121,22 +1121,22 @@ img {
   justify-content: center;
   border-bottom: 1px solid var(--gw-border);
   background: #f7faff;
-  padding: 0 20px;
-  gap: 12px;
+  padding: 0 14px;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
 .vxr-mode-tab {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 17px 26px;
+  gap: 7px;
+  padding: 11px 16px;
   border: none;
-  border-bottom: 3.5px solid transparent;
+  border-bottom: 2.5px solid transparent;
   background: transparent;
   color: var(--gw-muted);
-  font-weight: 700;
-  font-size: 16px;
+  font-weight: 600;
+  font-size: 13.5px;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -1151,61 +1151,62 @@ img {
 .vxr-tab-badge {
   background: #ffc700;
   color: #0d2e59;
-  font-size: 11.5px;
-  font-weight: 800;
-  padding: 3px 9px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
   border-radius: 999px;
 }
 
 .vxr-search-form {
-  padding: clamp(22px, 2.8vw, 30px);
+  padding: 14px 18px;
   display: grid;
-  grid-template-columns: 1.18fr auto 1.18fr 0.95fr 1.15fr auto;
-  gap: 14px;
+  grid-template-columns: 1.15fr auto 1.15fr 0.9fr 1.1fr auto;
+  gap: 10px;
   align-items: center;
 }
 
 .vxr-input-box {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 13px 18px;
-  min-height: 68px;
-  border: 1.5px solid var(--gw-border);
-  border-radius: 14px;
+  gap: 8px;
+  padding: 8px 12px;
+  min-height: 48px;
+  border: 1px solid var(--gw-border);
+  border-radius: 10px;
   background: #ffffff;
   transition: border-color 0.2s, box-shadow 0.2s;
   min-width: 0;
 }
 
 .vxr-input-box .gw-field-icon {
-  font-size: 25px;
+  font-size: 18px;
 }
 
 .vxr-input-box .gw-field-label {
-  font-size: 13px;
-  margin-bottom: 2px;
+  font-size: 11.5px;
+  margin-bottom: 1px;
 }
 
 .vxr-input-box .gw-field-control {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 2px 0;
 }
 
 .vxr-input-box:focus-within {
   border-color: var(--gw-green);
-  box-shadow: 0 0 0 3.5px rgba(36, 116, 229, 0.16);
+  box-shadow: 0 0 0 2.5px rgba(36, 116, 229, 0.14);
 }
 
 .vxr-swap-btn {
-  width: 44px;
-  height: 44px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  border: 1.5px solid #c5dcf8;
+  border: 1px solid #c5dcf8;
   background: var(--gw-green-light);
   color: var(--gw-green);
-  font-size: 19px;
-  font-weight: 800;
+  font-size: 15px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1224,15 +1225,15 @@ img {
   background: #ffc700;
   color: #0d2e59;
   border: none;
-  border-radius: 14px;
-  padding: 16px 32px;
-  min-height: 68px;
-  font-weight: 800;
-  font-size: 17px;
+  border-radius: 10px;
+  padding: 10px 20px;
+  min-height: 48px;
+  font-weight: 700;
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
-  box-shadow: 0 10px 24px rgba(255, 199, 0, 0.36);
+  box-shadow: 0 6px 16px rgba(255, 199, 0, 0.3);
 }
 
 .vxr-search-submit:hover {
@@ -1243,13 +1244,13 @@ img {
 .vxr-trust-strip {
   background: linear-gradient(90deg, #0d2e59 0%, #1858b8 100%);
   color: #ffffff;
-  padding: 14px 24px;
+  padding: 9px 16px;
   display: flex;
   justify-content: space-around;
   align-items: center;
   flex-wrap: wrap;
-  gap: 16px;
-  font-size: 14px;
+  gap: 12px;
+  font-size: 12.5px;
   font-weight: 600;
 }
 

@@ -62,38 +62,148 @@ img {
   display: block;
 }
 
-/* 1. Slim 1-Line Vexere Utility Topbar (#0D2E59) */
+/* 1. Topbar (#0D2E59) */
 .gw-topbar {
   background: var(--gw-dark);
   color: #dbeafe;
   font-size: 12.5px;
-  padding: 7px clamp(14px, 2.5vw, 28px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px clamp(14px, 2.5vw, 28px);
 }
 
 .gw-topbar-inner {
-  max-width: 1320px;
+  max-width: 1290px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.gw-topbar-left,
-.gw-topbar-right {
+.gw-topbar-left {
   display: flex;
   gap: 18px;
   align-items: center;
-  flex-wrap: nowrap;
-  white-space: nowrap;
+  flex-wrap: wrap;
 }
 
-.gw-topbar-left span i,
-.gw-topbar-right span i {
+.gw-topbar-left span i {
   color: var(--gw-orange);
   margin-right: 5px;
   font-style: normal;
+}
+
+.gw-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.gw-book-now-top {
+  background: var(--gw-green);
+  color: #fff;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.gw-portal-pill {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.gw-portal-pill.active,
+.gw-portal-pill:hover {
+  background: var(--gw-green);
+  border-color: var(--gw-green);
+}
+
+/* 3. Clear Scenic Hero Banner (Left-aligned copy, search box sits below) */
+.gw-hero {
+  position: relative;
+  min-height: clamp(440px, 56vh, 560px);
+  background-size: cover;
+  background-position: center 45%;
+  display: flex;
+  align-items: center;
+  padding: clamp(44px, 6vw, 76px) clamp(16px, 3vw, 32px) clamp(64px, 8vw, 96px);
+  color: #ffffff;
+}
+
+.gw-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(13, 46, 89, 0.62) 0%,
+    rgba(13, 46, 89, 0.34) 55%,
+    rgba(13, 46, 89, 0.12) 100%
+  );
+}
+
+.gw-hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1290px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.gw-hero-sub {
+  display: inline-block;
+  background: var(--gw-orange);
+  color: #0d2e59;
+  font-weight: 700;
+  font-size: clamp(12px, 1.3vw, 13.5px);
+  padding: 6px 16px;
+  border-radius: 8px;
+  margin-bottom: 14px;
+  box-shadow: 0 6px 16px rgba(255, 199, 0, 0.3);
+}
+
+.gw-hero h1 {
+  font-size: clamp(26px, 4vw, 46px);
+  font-weight: 800;
+  line-height: 1.18;
+  margin: 0 0 14px;
+  max-width: 720px;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 14px rgba(9, 30, 66, 0.55);
+}
+
+.gw-hero p {
+  font-size: clamp(14px, 1.5vw, 16px);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.96);
+  max-width: 620px;
+  margin: 0 0 22px;
+  text-shadow: 0 1px 10px rgba(9, 30, 66, 0.55);
+}
+
+/* 4. Search Wrap Placed Below Hero Section */
+.gw-search-wrap {
+  max-width: 1290px;
+  width: 100%;
+  margin: -38px auto 0;
+  padding: 0 clamp(16px, 3vw, 32px);
+  position: relative;
+  z-index: 30;
+  text-align: left;
 }
 
 /* 2. Unified Vexere White Sticky Header + Responsive Mobile Drawer */
@@ -294,75 +404,7 @@ img {
   border-color: #93c5fd;
 }
 
-/* 3. Clear Scenic Vexere Hero Banner with Embedded Search Box */
-.gw-hero {
-  position: relative;
-  min-height: 460px;
-  background-size: cover;
-  background-position: center 52%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: clamp(28px, 4vw, 44px) clamp(14px, 2.5vw, 28px) clamp(32px, 4vw, 48px);
-  color: #ffffff;
-}
-
-.gw-hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  /* Ultra-clean subtle Vexere scrim so background scenery is bright and never covered */
-  background: linear-gradient(
-    180deg,
-    rgba(16, 45, 68, 0.14) 0%,
-    rgba(16, 45, 68, 0.18) 50%,
-    rgba(16, 45, 68, 0.36) 100%
-  );
-}
-
-.gw-hero-inner {
-  position: relative;
-  z-index: 2;
-  max-width: 1220px;
-  width: 100%;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.gw-hero-sub {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(13, 46, 89, 0.65);
-  backdrop-filter: blur(6px);
-  color: #ffd633;
-  border: 1px solid rgba(255, 214, 51, 0.45);
-  font-weight: 600;
-  font-size: 12.5px;
-  letter-spacing: 0.02em;
-  padding: 5px 14px;
-  border-radius: 999px;
-  margin-bottom: 10px;
-}
-
-.gw-hero h1 {
-  font-size: clamp(23px, 2.8vw, 34px);
-  font-weight: 700;
-  line-height: 1.28;
-  margin: 0 auto 6px;
-  max-width: 820px;
-  letter-spacing: -0.015em;
-  text-shadow: 0 2px 12px rgba(14, 40, 58, 0.55);
-}
-
-.gw-hero p {
-  font-size: clamp(13.5px, 1.3vw, 15px);
-  font-weight: 500;
-  color: #ffffff;
-  max-width: 680px;
-  margin: 0 auto 20px;
-  text-shadow: 0 1px 8px rgba(14, 40, 58, 0.55);
-}
+/* (Hero and Search Wrap configured above) */
 
 .gw-btn-green,
 .gw-btn-orange {
@@ -397,15 +439,7 @@ img {
   background: #e6b300;
 }
 
-/* 4. Embedded Search Wrap inside Hero (Vexere style) */
-.gw-search-wrap {
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-  position: relative;
-  z-index: 30;
-  text-align: left;
-}
+/* (Search wrap configured above) */
 
 .gw-search-box {
   background: #ffffff;

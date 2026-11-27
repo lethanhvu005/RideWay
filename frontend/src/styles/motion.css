@@ -1,4 +1,4 @@
-﻿/* Motion stays separate from the existing layout and booking styles. */
+/* Motion stays separate from the existing layout and booking styles. */
 .gw-hero { overflow: hidden; isolation: isolate; }
 .gw-hero::before { z-index: 1; pointer-events: none; }
 .motion-hero-image { position: absolute; inset: 0; background-size: cover; background-position: center; pointer-events: none; animation: hero-scenery 1.2s ease-out both; }
@@ -26,7 +26,7 @@
 @keyframes modal-arrive { from { opacity: 0; transform: translateY(14px) scale(.98); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto !important; }
-  *:not(.gw-hero-slide-layer):not(.gw-hero-dot), *::before, *::after { animation: none !important; transition: none !important; }
+  *:not(.gw-hero-slide-layer):not(.gw-hero-dot):not(.mona-discover-track):not(.mona-discover-dot), *::before, *::after { animation: none !important; transition: none !important; }
   .motion-pending { opacity: 1; translate: none; }
   .gw-tour-card:hover, .gw-activity-card:hover, .gw-btn-green:hover, .gw-btn-orange:hover, .vx-btn-primary:hover { transform: none; }
 }

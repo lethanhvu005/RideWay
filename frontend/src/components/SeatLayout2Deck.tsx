@@ -136,7 +136,7 @@ export function SeatLayout2Deck({
                 <div
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: `repeat(${maxCol}, minmax(78px, 1fr))`,
+                    gridTemplateColumns: `repeat(${maxCol}, minmax(0, 1fr))`,
                     gap: 8,
                   }}
                 >

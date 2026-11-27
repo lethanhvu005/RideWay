@@ -27,3 +27,6 @@ Thumbs.db
 .django-secret-key
 *.tsbuildinfo
 .pytest_cache/
+
+# Collected production assets
+backend/staticfiles/

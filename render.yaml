@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: rideway
+    runtime: docker
+    plan: free
+    region: singapore
+    branch: main
+    autoDeployTrigger: commit
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/v1/health/ready
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_SESSION_SECURE
+        value: "True"
+      - key: DJANGO_CSRF_SECURE
+        value: "True"
+      - key: DJANGO_SECURE_SSL_REDIRECT
+        value: "True"
+      - key: WEB_CONCURRENCY
+        value: "2"

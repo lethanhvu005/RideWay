@@ -98,6 +98,7 @@ REST_FRAMEWORK = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -188,3 +189,32 @@ MAILERS = {
         'BACKEND': os.environ.get('DJANGO_EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend'),
     },
 }
+
+# Production deployment: one origin for the SPA, API and session cookies.
+FRONTEND_DIST = BASE_DIR.parent / 'frontend' / 'dist'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+WHITENOISE_ROOT = FRONTEND_DIST
+WHITENOISE_INDEX_FILE = False
+
+if os.environ.get('DATABASE_URL'):
+    import dj_database_url
+    DATABASES['default'] = dj_database_url.parse(
+        os.environ['DATABASE_URL'], conn_max_age=60, conn_health_checks=True,
+    )
+    if not DEBUG:
+        DATABASES['default'].setdefault('OPTIONS', {}).setdefault('sslmode', 'require')
+    # Compatible with Neon transaction pooling when it is enabled.
+    DATABASES['default']['DISABLE_SERVER_SIDE_CURSORS'] = True
+
+render_hostname = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if render_hostname:
+    ALLOWED_HOSTS.append(render_hostname)
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip() for origin in os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', '').split(',') if origin.strip()
+]
+if render_hostname:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{render_hostname}')
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = os.environ.get('DJANGO_SECURE_SSL_REDIRECT', 'False').lower() == 'true'
+SECURE_REDIRECT_EXEMPT = [r'^api/v1/health/(live|ready)$']

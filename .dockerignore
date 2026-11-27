@@ -1,0 +1,16 @@
+**/.git
+**/node_modules
+**/venv
+**/.venv
+**/dist
+**/__pycache__
+**/*.pyc
+**/.env
+**/.env.*
+**/.django-secret-key
+**/*.sqlite3
+**/*.log
+.agents
+.specify
+docs
+specs

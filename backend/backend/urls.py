@@ -1,5 +1,6 @@
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
+from .frontend import frontend
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -10,4 +11,5 @@ urlpatterns = [
     path('api/v1/', include('payments.urls')),
     path('api/v1/', include('finance.urls')),
     path('api/v1/', include('content.urls')),
+    re_path(r'^(?!api(?:/|$)|admin(?:/|$)|static(?:/|$)|assets(?:/|$)|images(?:/|$)).*$', frontend),
 ]
